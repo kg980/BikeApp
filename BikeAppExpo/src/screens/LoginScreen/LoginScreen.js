@@ -19,6 +19,10 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     logo: {
+        borderColor: '#EDEDED',
+        borderWidth: 1,
+        borderRadius: 15,
+        marginVertical: 10,
         maxHeight: 450,
         maxWidth: 450,
         width: "100%",

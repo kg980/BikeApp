@@ -10,7 +10,15 @@ const CustomInput = () => {
 }
 
 const styles = StyleSheet.create({
-    container: {},
+    container: {
+        backgroundColor: '#EDEDED',
+        width: '100%',
+        height: 60,
+        borderColor: '#EDEDED',
+        borderWidth: 1,
+        borderRadius: 15,
+        marginVertical: 10,
+    },
     input: {},
 });
 
