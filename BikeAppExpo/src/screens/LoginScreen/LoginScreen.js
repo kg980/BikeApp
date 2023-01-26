@@ -21,7 +21,7 @@ const LoginScreen = () => {
             <Image source={LoginLogo} style={[styles.logo, {height: height *  0.5}]} resizeMode="contain"/>
             <CustomInput placeholder="Username" value={username} setValue={setUsername}/>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-            <CustomButton text="Log In" onPress={logInPressed}/>
+            <CustomButton text="Log In" onPress={logInPressed} type='primary'/>
         </View>
     );
 };
