@@ -3,12 +3,14 @@ import { View, Text, StyleSheet, Pressable} from 'react-native';
 
 const CustomFooter = () => {
     return (
-        <View></View>
+        <View>
+            <Text>Footer</Text>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {}
+    root: {}
 });
 
 export default CustomFooter

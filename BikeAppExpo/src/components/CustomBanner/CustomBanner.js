@@ -3,12 +3,18 @@ import { View, Text, StyleSheet, Pressable} from 'react-native';
 
 const CustomBanner = () => {
     return (
-        <View></View>
+        <View>
+            <Text>Banner</Text>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {}
+    root: {
+        height: 60,
+        //position: 'fixed',
+        backgroundColor: '#FF8001',
+    },
 });
 
 export default CustomBanner
