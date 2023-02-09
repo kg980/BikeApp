@@ -19,13 +19,21 @@ const HomeScreen = () => {
                     <Text>~HELLO</Text>
                 </View>
                 <View style={styles.buttonsBox}>
-                    <View style={styles.buttonsRow}>
-                        <Text>Button1</Text>
-                        <Text>Button2</Text>
+                    <View style={styles.buttonsCol}>
+                        <View style={styles.navButton}>
+                            <Text>Button1</Text>
+                        </View>
+                        <View style={styles.navButton}>
+                            <Text>Button2</Text>
+                        </View>
                     </View>
-                    <View style={styles.buttonsRow}>
-                        <Text>Button3</Text>
-                        <Text>Button4</Text>
+                    <View style={styles.buttonsCol}>
+                        <View style={styles.navButton}>
+                            <Text>Button3</Text>
+                        </View>
+                        <View style={styles.navButton}>
+                            <Text>Button4</Text>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -65,7 +73,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
-        height: '50%',
+        height: '60%',
         alignItems: 'center',
         //marginBottom: 'auto',
         backgroundColor: '#EDEDED',
@@ -76,13 +84,28 @@ const styles = StyleSheet.create({
     buttonsBox: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'stretch',
         justifyContent: 'space-around',
-        backgroundColor: 'red',
-        height: '50%',
+        backgroundColor: 'white',
+        height: '40%',
     },
-    buttonsRow: {
-        backgroundColor: 'yellow',
+    buttonsCol: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        justifyContent: 'space-around',
+        //backgroundColor: 'yellow',
+        padding: '1%',
+    },
+    navButton: {
+        alignItems: 'center',
+        margin: '15%',
+        padding: '5%',
+        backgroundColor: '#EDEDED',
+        borderColor: '#EDEDED',
+        borderWidth: 1,
+        borderRadius: 15,
+        height: '45%',
     },
 });
 
