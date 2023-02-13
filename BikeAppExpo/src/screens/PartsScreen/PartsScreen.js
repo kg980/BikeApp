@@ -6,13 +6,11 @@ import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
+import PartsCard from "../../components/PartsCard";
 
 //screen for distance tracker and navigation buttons
 
 const PartsScreen = () => {
-
-    
-
     return (
         <View style={styles.root}>
             <CustomBanner text='My Bikes'/>
@@ -22,31 +20,16 @@ const PartsScreen = () => {
                     <Image source={Bicycle} resizeMode="contain" style={styles.logo}/>
                 </View>
                 <ScrollView style={styles.partsContainer}>
-                    <Text>TEST1</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST</Text>
-                    <Text>TEST100</Text>
+                    <PartsCard/>
+                    <PartsCard/>
+                    <PartsCard/>
+                    <PartsCard/>
+                    <PartsCard/>
+                    <PartsCard/>
+                    <PartsCard/>
+                    <PartsCard/>
+                    <PartsCard/>
+                    <PartsCard/>
                 </ScrollView>
             </View>
             <CustomFooter />
