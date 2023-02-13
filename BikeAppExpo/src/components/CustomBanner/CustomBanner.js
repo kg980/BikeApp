@@ -1,10 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable} from 'react-native';
+import CustomButton from "../../components/CustomButton";
 
-const CustomBanner = () => {
+const CustomBanner = ({text, ButtonL, ButtonR}) => {
     return (
+        <View>
+        <View style={styles.strip}><Text>Strip</Text></View>
         <View style={styles.root}>
-            <Text>Banner</Text>
+            <Pressable>{ButtonL}</Pressable>
+            <Text style={styles.text}>{text}</Text>
+            <Pressable>{ButtonR}</Pressable>
+        </View>
         </View>
     )
 }
@@ -15,8 +21,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         backgroundColor: '#FF8001',
-        height: 125,
+        height: 80,
         alignItems: 'center',
+        padding: '5%',
+        marginBottom: 10,
+    },
+    strip: {
+        height: 50,
+        backgroundColor: '#CD6700',
+    },
+    text: {
+        color: 'white',
+        fontSize: 24,
+        fontStyle: 'bold',
     },
 });
 

@@ -1,6 +1,7 @@
 import React , {useState} from "react";
 import { View, Text, Image, StyleSheet, useWindowDimensions} from 'react-native';
-import LoginLogo from "../../../assets/images/LoginLogo.png";
+import Bicycle from "../../../assets/images/Bicycle.png";
+import BicycleRed from "../../../assets/images/BicycleRed.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
@@ -13,27 +14,22 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.root}>
-            <CustomBanner />
+            <CustomBanner text='Profile'/>
             <View style={styles.content}>
                 <View style={styles.distance}>
-                    <Text>~HELLO</Text>
+                    <Image source={Bicycle} resizeMode="contain"/>
+                    <Text>METER</Text>
+                    <Text>Distance</Text>
+                    <Text>Button</Text>
                 </View>
                 <View style={styles.buttonsBox}>
                     <View style={styles.buttonsCol}>
-                        <View style={styles.navButton}>
-                            <Text>Button1</Text>
-                        </View>
-                        <View style={styles.navButton}>
-                            <Text>Button2</Text>
-                        </View>
+                        <CustomButton text="My Bikes" style={styles.navButton} type="secondary"/>
+                        <CustomButton text="Maintenance Checklist" style={styles.navButton} type="secondary"/>
                     </View>
                     <View style={styles.buttonsCol}>
-                        <View style={styles.navButton}>
-                            <Text>Button3</Text>
-                        </View>
-                        <View style={styles.navButton}>
-                            <Text>Button4</Text>
-                        </View>
+                        <CustomButton text="               Forum               " style={styles.navButton} type="secondary"/>
+                        <CustomButton text="History" style={styles.navButton} type="secondary"/>
                     </View>
                 </View>
             </View>
@@ -101,6 +97,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         margin: '15%',
         padding: '5%',
+        paddingHorizontal: '50%',
         backgroundColor: '#EDEDED',
         borderColor: '#EDEDED',
         borderWidth: 1,

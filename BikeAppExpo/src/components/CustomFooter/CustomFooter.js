@@ -1,10 +1,20 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable} from 'react-native';
+import { View, Text, StyleSheet, Pressable, Image} from 'react-native';
+import CustomButton from "../CustomButton";
+import GoButton from "../../../assets/images/GoButton3.png";
 
 const CustomFooter = () => {
+    const goPressed = () => {
+        //take to journey screen
+        console.warn("GO Pressed");
+    };
+
+
     return (
         <View style={styles.root}>
-            <Text>Footer</Text>
+            <Pressable onPress={goPressed}>
+                <Image source={GoButton} styles={styles.go}/>
+            </Pressable>
         </View>
     )
 }
@@ -15,9 +25,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         backgroundColor: '#FF8001',
-        height: 100,
+        height: 80,
         alignItems: 'center',
-    }
+    },
+    go: {
+    },
 });
 
 export default CustomFooter
