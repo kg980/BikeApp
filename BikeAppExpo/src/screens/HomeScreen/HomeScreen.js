@@ -10,6 +10,25 @@ import CustomFooter from "../../components/CustomFooter";
 //screen for distance tracker and navigation buttons
 
 const HomeScreen = () => {
+    const myBikesPressed = () => {
+        //authenticate
+        console.warn("Load My Bikes Page");
+    };
+
+    const forumPressed = () => {
+        //authenticate
+        console.warn("Load Forum Page");
+    };
+
+    const maintListPressed = () => {
+        //authenticate
+        console.warn("Load maintenance Checklist Page");
+    };
+
+    const journeysPressed = () => {
+        //authenticate
+        console.warn("Load Journey History Page");
+    };
     
 
     return (
@@ -24,12 +43,12 @@ const HomeScreen = () => {
                 </View>
                 <View style={styles.buttonsBox}>
                     <View style={styles.buttonsCol}>
-                        <CustomButton text="My Bikes" style={styles.navButton} type="secondary"/>
-                        <CustomButton text="Maintenance Checklist" style={styles.navButton} type="secondary"/>
+                        <CustomButton text="My Bikes" style={styles.navButton} type="secondary" onPress={myBikesPressed}/>
+                        <CustomButton text="Maintenance Checklist" style={styles.navButton} type="secondary" onPress={maintListPressed}/>
                     </View>
                     <View style={styles.buttonsCol}>
-                        <CustomButton text="               Forum               " style={styles.navButton} type="secondary"/>
-                        <CustomButton text="History" style={styles.navButton} type="secondary"/>
+                        <CustomButton text="               Forum               " style={styles.navButton} type="secondary" onPress={forumPressed}/>
+                        <CustomButton text="Journeys" style={styles.navButton} type="secondary" onPress={journeysPressed}/>
                     </View>
                 </View>
             </View>
