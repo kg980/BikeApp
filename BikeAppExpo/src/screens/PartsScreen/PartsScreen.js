@@ -45,7 +45,7 @@ const PartsScreen = () => {
                     <PartsCard/>
                 </ScrollView>
             </View>
-            <CustomFooter />
+            <CustomFooter isGo='false'/>
         </View>
     );
 };

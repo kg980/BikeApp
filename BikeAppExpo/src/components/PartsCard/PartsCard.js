@@ -14,7 +14,7 @@ const PartsCard = ({part, brand, description}) => {
                 </View>
             </TouchableOpacity>
             
-            {showContent && (
+            {showContent && ( //if shotContent = true, then display the following:
                 <View style={styles.bodyContainer}>
                     <Text style={styles.bodyText}>Brand: </Text>
                     <View style={styles.bodyInput}>
