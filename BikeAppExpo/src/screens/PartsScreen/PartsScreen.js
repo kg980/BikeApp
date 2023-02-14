@@ -19,6 +19,8 @@ const PartsScreen = () => {
         console.warn("changeBikeName");
     };
 
+    
+
     return (
         <View style={styles.root}>
             <CustomBanner 
@@ -45,7 +47,7 @@ const PartsScreen = () => {
                     <PartsCard/>
                 </ScrollView>
             </View>
-            <CustomFooter isGo='false'/>
+            <CustomFooter/>
         </View>
     );
 };

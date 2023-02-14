@@ -58,7 +58,7 @@ const HomeScreen = () => {
                     </View>
                 </View>
             </View>
-            <CustomFooter isGo='false'/>
+            <CustomFooter/>
         </View>
     );
 };
