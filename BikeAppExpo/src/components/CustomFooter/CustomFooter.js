@@ -3,16 +3,18 @@ import { View, Text, StyleSheet, Pressable, Image} from 'react-native';
 import CustomButton from "../CustomButton";
 import GoButton from "../../../assets/images/GoButton3.png";
 
-const CustomFooter = () => {
-    const goPressed = () => {
+const CustomFooter = ({type}) => {
+    const goNavPressed = () => {
         //take to journey screen
-        console.warn("GO Pressed");
+        //on journey screen, there is a new button to actually start the journey.
+        console.warn("GO navigation Pressed");
     };
 
 
+    //conditional to show nav or start button based on parameter 'type' -  'nav' or 'start'
     return (
         <View style={styles.root}>
-            <Pressable onPress={goPressed}>
+            <Pressable onPress={goNavPressed}>
                 <Image source={GoButton} styles={styles.go}/>
             </Pressable>
         </View>

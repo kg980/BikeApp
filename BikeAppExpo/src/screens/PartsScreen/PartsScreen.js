@@ -11,12 +11,25 @@ import PartsCard from "../../components/PartsCard";
 //screen for distance tracker and navigation buttons
 
 const PartsScreen = () => {
+    const addButtonClicked = () => {
+        console.warn("Add Bike Clicked");
+    };
+
+    const changeBikeName = () => {
+        console.warn("changeBikeName");
+    };
+
     return (
         <View style={styles.root}>
-            <CustomBanner text='My Bikes'/>
+            <CustomBanner 
+                text='My Bikes' 
+                ButtonL={<CustomButton text='   ' type='icon'/>} 
+                ButtonR={<CustomButton text="+" type='icon' onPress={addButtonClicked}/>}
+            
+                />
             <View style={styles.content}>
                 <View style={styles.bikes}>
-                    <Text style={styles.bikesText}>Bike1</Text>
+                    <Pressable onPress={changeBikeName}><Text style={styles.bikesText}>Bike1</Text></Pressable>
                     <Image source={Bicycle} resizeMode="contain" style={styles.logo}/>
                 </View>
                 <ScrollView style={styles.partsContainer}>

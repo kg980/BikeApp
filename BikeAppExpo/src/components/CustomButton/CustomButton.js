@@ -37,6 +37,16 @@ const styles = StyleSheet.create({
         //marginVertical: 1,
         paddingVertical: '1%',
     },
+    container_icon: {
+        backgroundColor: '#FF8001',
+        borderColor: '#FF8001',
+    },
+    text_icon: {
+        color: 'white',
+        fontSize: 30,
+        padding: '2%',
+        fontWeight: 'normal',
+    },
 
 
     text: { //generic button text

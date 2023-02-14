@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     root: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         backgroundColor: '#FF8001',
         height: 80,
         alignItems: 'center',
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     text: {
         color: 'white',
         fontSize: 24,
+        alignSelf: 'center',
     },
 });
 
