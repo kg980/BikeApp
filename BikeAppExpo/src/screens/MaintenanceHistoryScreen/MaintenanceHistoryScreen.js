@@ -1,17 +1,13 @@
 import React , {useState} from "react";
 import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView} from 'react-native';
-import Bicycle from "../../../assets/images/Bicycle.png";
-import BicycleRed from "../../../assets/images/BicycleRed.png";
-import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
-import JourneyCard from "../../components/JourneyCard";
 import CustomCard from "../../components/CustomCard";
 
 //screen for distance tracker and navigation buttons
 
-const JourneyHistoryScreen = () => {
+const MaintenanceHistoryScreen = () => {
     const addButtonClicked = () => {
         console.warn("Add Bike Clicked");
     };
@@ -20,7 +16,7 @@ const JourneyHistoryScreen = () => {
     return (
         <View style={styles.root}>
             <CustomBanner 
-                text='Journeys' 
+                text='Maintenance History' 
                 ButtonL={<CustomButton text='   ' type='icon'/>} 
                 ButtonR={<CustomButton text="+" type='icon' onPress={addButtonClicked}/>}
             
@@ -30,7 +26,7 @@ const JourneyHistoryScreen = () => {
                     <Pressable><Text style={styles.bikesText}>Bike1</Text></Pressable>
                 </View>
                 <ScrollView style={styles.partsContainer}>
-                    <CustomCard Title="Date"  Var1="Distance (km)" Var2="Time (min/sec)"/>
+                    <CustomCard Title="Date"  Var1="Part" Var2="Maintenance done"/>
                 </ScrollView>
             </View>
             <CustomFooter isGo='false'/>
@@ -95,4 +91,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default JourneyHistoryScreen;
+export default MaintenanceHistoryScreen;

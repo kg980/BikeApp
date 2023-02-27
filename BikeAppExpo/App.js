@@ -6,11 +6,12 @@ import LoginScreen from './src/screens/LoginScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import PartsScreen from './src/screens/PartsScreen';
 import JourneyHistoryScreen from './src/screens/JourneyHistoryScreen';
+import MaintenanceHistoryScreen from './src/screens/MaintenanceHistoryScreen';
 
 const App = () => {
   return (
     <SafeAreaView style={styles.root}>
-      <PartsScreen />
+      <MaintenanceHistoryScreen />
     </SafeAreaView>
   );
 }
