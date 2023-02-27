@@ -7,6 +7,7 @@ import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
 import PartsCard from "../../components/PartsCard";
+import CustomCard from "../../components/CustomCard";
 
 //screen for distance tracker and navigation buttons
 
@@ -33,16 +34,13 @@ const PartsScreen = () => {
                     <Image source={Bicycle} resizeMode="contain" style={styles.logo}/>
                 </View>
                 <ScrollView style={styles.partsContainer}>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
+                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
+                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
+                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
+                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
+                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
+                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
+                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
                 </ScrollView>
             </View>
             <CustomFooter isGo='false'/>

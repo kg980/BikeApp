@@ -6,7 +6,8 @@ import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
-import PartsCard from "../../components/PartsCard";
+import JourneyCard from "../../components/JourneyCard";
+import CustomCard from "../../components/CustomCard";
 
 //screen for distance tracker and navigation buttons
 
@@ -22,7 +23,7 @@ const JourneyHistoryScreen = () => {
     return (
         <View style={styles.root}>
             <CustomBanner 
-                text='My Bikes' 
+                text='Journeys' 
                 ButtonL={<CustomButton text='   ' type='icon'/>} 
                 ButtonR={<CustomButton text="+" type='icon' onPress={addButtonClicked}/>}
             
@@ -30,19 +31,9 @@ const JourneyHistoryScreen = () => {
             <View style={styles.content}>
                 <View style={styles.bikes}>
                     <Pressable onPress={changeBikeName}><Text style={styles.bikesText}>Bike1</Text></Pressable>
-                    <Image source={Bicycle} resizeMode="contain" style={styles.logo}/>
                 </View>
                 <ScrollView style={styles.partsContainer}>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
-                    <PartsCard/>
+                    <CustomCard Title="Date"  Var1="Distance (km)" Var2="Time (min/sec)"/>
                 </ScrollView>
             </View>
             <CustomFooter isGo='false'/>
@@ -81,7 +72,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
-        height: '35%',
+        height: '15%',
         alignItems: 'center',
         //marginBottom: 'auto',
         backgroundColor: '#EDEDED',

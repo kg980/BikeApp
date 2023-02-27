@@ -5,6 +5,7 @@ import LoginOptionsScreen from './src/screens/LoginOptionsScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import PartsScreen from './src/screens/PartsScreen';
+import JourneyHistoryScreen from './src/screens/JourneyHistoryScreen';
 
 const App = () => {
   return (
