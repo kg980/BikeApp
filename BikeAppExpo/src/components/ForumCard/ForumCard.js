@@ -2,35 +2,53 @@ import React, { useState, useTransition } from "react";
 import { View, Text, StyleSheet, Pressable, Image, TouchableOpacity} from 'react-native';
 import EditIcon from "../../../assets/images/EditIcon.png";
 import DeleteIcon from "../../../assets/images/DeleteIcon.png";
+import ReplyIcon from "../../../assets/images/ReplyIcon.png";
+import CustomButton from "../CustomButton";
 
-const CustomCard = ({Title, TitleValue, Var1, Var1Value, Var2, Var2Value, EditAction, DeleteAction}) => {
+const ForumCard = ({Title, Body, EditAction, DeleteAction, ReplyAction}) => {
     const [showContent, setShowContent] = useState(false);
-    
+    const [showComments, setShowComments] = useState(false);
 
     return (
         <View style={styles.root}>
             <TouchableOpacity onPress={() => setShowContent(!showContent)}>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>{Title}: {TitleValue}</Text>
+                    <Text style={styles.titleText}>{Title}</Text>
                     <Text style={styles.titleArrow}>></Text>
                 </View>
             </TouchableOpacity>
             
             {showContent && ( //if showContent = true, then display the following:
                 <View style={styles.bodyContainer}>
-                    <Text style={styles.bodyText}>{Var1}: </Text>
                     <View style={styles.bodyInput}>
-                        <Text style={styles.bodyText}>{Var1Value} </Text>
+                        <Text style={styles.bodyText}>{Body} </Text>
                     </View>
                     
-                    <Text style={styles.bodyText}>{Var2}: </Text>
-                    <View style={styles.bodyInput}>
-                        <Text style={styles.bodyText}>{Var2Value}</Text>
-                    </View>
                     <View style={styles.iconButtons}>
                         <Pressable><Image source={EditIcon} resizeMode="contain" style={styles.icons} onPress={EditAction}/></Pressable>
                         <Pressable><Image source={DeleteIcon} resizeMode="contain" style={styles.icons} onPress={DeleteAction}/></Pressable>
+                        <Pressable><Image source={ReplyIcon} resizeMode="contain" style={styles.icons} onPress={ReplyAction}/></Pressable>
                     </View>
+                    
+                    <TouchableOpacity>
+                        <View style={styles.replyContainer}>
+                        {showComments && (<CustomButton text="Hide Replies" type='tertiary' onPress={() => setShowComments(!showComments)}/>)}
+                        {!showComments && (<CustomButton text="Show Replies" type='tertiary' onPress={() => setShowComments(!showComments)}/>)}
+                        </View>
+                    </TouchableOpacity>
+
+                    {showComments && (
+                        <View>
+                            <View style={styles.bodyInput}>
+                                <Text>Reply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply 
+                            testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply test</Text>
+                            </View>
+                            <View style={styles.bodyInput}>
+                                <Text>Reply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply 
+                            testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply test</Text>
+                            </View>
+                        </View>
+                    )}
                 </View>
             )}
             
@@ -70,6 +88,7 @@ const styles = StyleSheet.create({
         padding: '2%',
         borderRadius: 10,
         borderColor: '#F9F9F9',
+        margin: '1%',
     },
     bodyText: {
         padding: '2%',
@@ -89,6 +108,9 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginHorizontal: '2%',
     },
+    commentsContainer: {
+        //backgroundColor: 'red',
+    },
 });
 
-export default CustomCard
+export default ForumCard

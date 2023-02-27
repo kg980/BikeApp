@@ -7,11 +7,13 @@ import HomeScreen from './src/screens/HomeScreen';
 import PartsScreen from './src/screens/PartsScreen';
 import JourneyHistoryScreen from './src/screens/JourneyHistoryScreen';
 import MaintenanceHistoryScreen from './src/screens/MaintenanceHistoryScreen';
+import JourneyScreen from './src/screens/JourneyScreen';
+import ForumScreen from './src/screens/ForumScreen/ForumScreen';
 
 const App = () => {
   return (
     <SafeAreaView style={styles.root}>
-      <MaintenanceHistoryScreen />
+      <ForumScreen />
     </SafeAreaView>
   );
 }
