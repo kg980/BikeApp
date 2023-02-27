@@ -10,7 +10,7 @@ import PartsCard from "../../components/PartsCard";
 
 //screen for distance tracker and navigation buttons
 
-const PartsScreen = () => {
+const JourneyHistoryScreen = () => {
     const addButtonClicked = () => {
         console.warn("Add Bike Clicked");
     };
@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PartsScreen;
+export default JourneyHistoryScreen;

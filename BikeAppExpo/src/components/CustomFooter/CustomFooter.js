@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable, Image} from 'react-native';
 import CustomButton from "../CustomButton";
 import GoButton from "../../../assets/images/GoButton3.png";
 
-const CustomFooter = ({isNav, buttonTask}) => {
+const CustomFooter = ({isGo}) => {
     
    
     const goNavPressed = () => {
@@ -12,25 +12,27 @@ const CustomFooter = ({isNav, buttonTask}) => {
         console.warn("GO navigation Pressed");
     };
 
+    const goStartPressed = () => {
+        //start journey timer
+        console.warn("Starting Journey");
+    };
+
     //isGo condition
     let footerButton;
-    !buttonTask ? (footerButton = 
+    isGo=='true' ? (footerButton = 
+    <View style={styles.root}>
+        <Pressable onPress={goStartPressed}>
+        <Image source={GoButton} styles={styles.go}/>
+        </Pressable>
+    </View>) 
+    : 
+    (footerButton = 
     <View style={styles.root}>
         <Pressable onPress={goNavPressed}>
             <Image source={GoButton} styles={styles.go}/>
         </Pressable>
-    </View>
-    ) 
-    : 
-    (footerButton = 
-    <View style={styles.root}>
-        <Pressable onPress={buttonTask}>
-            <Image source={GoButton} styles={styles.go}/>
-        </Pressable>
     </View>);
-    //conditional function: if a buttonTask is provided, then that will be the button's function. Else, the default function is to navigate to the journey screen.
-    
-    //buttonTask ? (onPress = {buttonTask}) : (onPress = goNavPressed)
+    //conditional to render button to start a journey if 'isGo' prop is true, navigate to the journey page if false/null.
     
     return (
         
