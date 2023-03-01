@@ -9,6 +9,7 @@ import JourneyHistoryScreen from './src/screens/JourneyHistoryScreen';
 import MaintenanceHistoryScreen from './src/screens/MaintenanceHistoryScreen';
 import JourneyScreen from './src/screens/JourneyScreen';
 import ForumScreen from './src/screens/ForumScreen/ForumScreen';
+import { NavigationContainer } from '@react-navigation/native';
 
 const App = () => {
   return (
