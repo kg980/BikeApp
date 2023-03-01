@@ -6,28 +6,34 @@ import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
+import { useNavigation } from "@react-navigation/native";
 
 //screen for distance tracker and navigation buttons
 
 const HomeScreen = () => {
+    const navigation = useNavigation();
     const myBikesPressed = () => {
         //
         console.warn("Load My Bikes Page");
+        navigation.navigate("PartsScreen");
     };
 
     const forumPressed = () => {
         //
         console.warn("Load Forum Page");
+        navigation.navigate("ForumScreen");
     };
 
     const maintListPressed = () => {
         //
         console.warn("Load maintenance Checklist Page");
+        navigation.navigate("MaintenanceChecklistScreen");
     };
 
     const journeysPressed = () => {
         //
         console.warn("Load Journey History Page");
+        navigation.navigate("JourneyHistoryScreen");
     };
     const pumpIt = () => {
         //Reset distance in database / on screen
@@ -53,8 +59,9 @@ const HomeScreen = () => {
                         <CustomButton text="Maintenance Checklist" style={styles.navButton} type="secondary" onPress={maintListPressed}/>
                     </View>
                     <View style={styles.buttonsCol}>
-                        <CustomButton text="               Forum               " style={styles.navButton} type="secondary" onPress={forumPressed}/>
                         <CustomButton text="Journeys" style={styles.navButton} type="secondary" onPress={journeysPressed}/>
+                        <CustomButton text="               Forum               " style={styles.navButton} type="secondary" onPress={forumPressed}/>
+
                     </View>
                 </View>
             </View>

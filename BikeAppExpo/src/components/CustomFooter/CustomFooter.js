@@ -2,19 +2,22 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable, Image} from 'react-native';
 import CustomButton from "../CustomButton";
 import GoButton from "../../../assets/images/GoButton3.png";
+import { useNavigation } from "@react-navigation/native";
 
 const CustomFooter = ({isGo}) => {
-    
+    const navigation = useNavigation(); 
    
     const goNavPressed = () => {
         //take to journey screen
         //on journey screen, there is a new button to actually start the journey.
         console.warn("GO navigation Pressed");
+        navigation.navigate("JourneyScreen")
     };
 
     const goStartPressed = () => {
         //start journey timer
         console.warn("Starting Journey");
+
     };
 
     //isGo condition

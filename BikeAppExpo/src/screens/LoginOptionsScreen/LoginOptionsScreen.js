@@ -3,32 +3,27 @@ import { View, Text, Image, StyleSheet, useWindowDimensions} from 'react-native'
 import LoginLogo from "../../../assets/images/LoginLogo.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
+import { useNavigation } from "@react-navigation/native";
 
 //screen which allows you to choose to log in or sign up
 
 const LoginOptionsScreen = () => {
     const[username, setUsername] = useState('');  //read  input from the app
     const[password, setPassword] =  useState(''); //read input from the app
+    const navigation = useNavigation();
 
     const {height} = useWindowDimensions();
+    
 
     const logInPressed = () => {
-        //code here for log in button event
-        //placeholder code:
         console.warn("Logged in");
-
-        //to-do:
-        //hide log in/sign up buttons
-        //show custominput for username/password  + log in confirm form button
+        //nav to loginscreen
+        navigation.navigate('LoginScreen');
     };
     const signUpPressed = () => {
-        //code here for log in button event
-        //placeholder code:
         console.warn("Sign Up");
 
-        //to-do:
-        //hide log in/sign up buttons
-        //show custominput for username/password  + sign up confirm form button
+        navigation.navigate('SignUpScreen');
     };
 
     return (
@@ -48,6 +43,7 @@ const styles = StyleSheet.create({
     root: {
         //alignItems: 'center',
         padding: 20,
+        backgroundColor: 'white',
     },
     logo: {
         alignItems: 'center',

@@ -7,23 +7,22 @@ import { useNavigation } from "@react-navigation/native";
 
 //screen which allows you to enter your login details and log in.
 
-const LoginScreen = () => {
+const SignUpScreen = () => {
     const[username, setUsername] = useState('');  //read  input from the app
     const[password, setPassword] =  useState(''); //read input from the app
+    const[confirmPassword, setConfirmPassword] =  useState(''); //read input from the app
     const navigation = useNavigation();
-
     const {height} = useWindowDimensions();
 
-    const logInEnterPressed = () => {
-        console.warn("Authenticating");
-        //validate user
-
-        //navigate to home screen
-        navigation.navigate("HomeScreen");
-    };
-    const forgotPassPressed = () => {
+    const signUpPressed = () => {
         //authenticate
-        console.warn("Forgot Password");
+        console.warn("Authenticating");
+        navigation.navigate("LoginScreen")
+    };
+    const backToLoginPressed = () => {
+        //authenticate
+        console.warn("Back To Login");
+        navigation.navigate("LoginOptionsScreen")
     };
 
     return (
@@ -31,8 +30,9 @@ const LoginScreen = () => {
             <Image source={LoginLogo} style={[styles.logo, {height: height *  0.5}]} resizeMode="contain"/>
             <CustomInput placeholder="Username" value={username} setValue={setUsername}/>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-            <CustomButton text="Log In" onPress={logInEnterPressed} type='primary'/>
-            <CustomButton text="Forgot Password" onPress={forgotPassPressed} type='tertiary'/>
+            <CustomInput placeholder="Confirm Password" value={confirmPassword} setValue={setConfirmPassword} secureTextEntry={true}/>
+            <CustomButton text="Create Account" onPress={signUpPressed} type='primary'/>
+            <CustomButton text="Back to login" onPress={backToLoginPressed} type='tertiary'/>
         </View>
         
     );
@@ -61,4 +61,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LoginScreen;
+export default SignUpScreen;
