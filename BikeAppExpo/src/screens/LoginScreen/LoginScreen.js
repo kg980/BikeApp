@@ -4,6 +4,7 @@ import LoginLogo from "../../../assets/images/LoginLogo.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
+import { useForm, Controller } from "react-hook-form";
 
 //screen which allows you to enter your login details and log in.
 
@@ -11,12 +12,13 @@ const LoginScreen = () => {
     const[username, setUsername] = useState('');  //read  input from the app
     const[password, setPassword] =  useState(''); //read input from the app
     const navigation = useNavigation();
-
     const {height} = useWindowDimensions();
 
-    const logInEnterPressed = () => {
-        console.warn("Authenticating");
+    const {control, handleSubmit}  = useForm(); //handlesubmit is for validation  (ensure correct format has been enterred), then send data to the server
+
+    const logInSubmitPressed = (data) => {
         //validate user
+        console.log(data);
 
         //navigate to home screen
         navigation.navigate("HomeScreen");
@@ -33,18 +35,22 @@ const LoginScreen = () => {
             
             
                 <CustomInput 
+                    fieldname={username}
                     placeholder="Username" 
-                    value={username} 
-                    setValue={setUsername}/>
+                    control={control}
+                />
+
 
                 <CustomInput 
+                    fieldname={password}
                     placeholder="Password" 
-                    value={password} 
-                    setValue={setPassword} 
-                    secureTextEntry={true}/>
+                    secureTextEntry={true}
+                    control={control}
+                />
+
             </KeyboardAvoidingView>
 
-            <CustomButton text="Log In" onPress={logInEnterPressed} type='primary'/>
+            <CustomButton text="Log In" onPress={handleSubmit(logInSubmitPressed)} type='primary'/>
             <CustomButton text="Forgot Password" onPress={forgotPassPressed} type='tertiary'/>
         </View>
         

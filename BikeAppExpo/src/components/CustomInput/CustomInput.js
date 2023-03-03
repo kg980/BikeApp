@@ -1,15 +1,29 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { useForm, Controller } from "react-hook-form";
 
-const CustomInput = ({value, setValue, placeholder, secureTextEntry}) => {
+const CustomInput = ({control, fieldname, placeholder, secureTextEntry}) => {
+
+    //updated custominput to work using react hook form;
+    //custom inputs now use a controller which renders the text input according to the values assigned to it on the screen
+    //the controller is passed a fieldname and the control variable from the outside, based on how it is to be used on each screen.
     return (
         <View style={styles.container}>
-            <TextInput 
-            value={value}
-            onChangeText={setValue}
-            placeholder={placeholder} 
-            style={styles.text}
-            secureTextEntry={secureTextEntry}
+
+
+            <Controller
+                control={control}
+                name={fieldname}
+                render={({field: {value, onChange, onBlur}}) => (
+                   <TextInput
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        placeholder={placeholder}
+                        style={styles.text}
+                        secureTextEntry={secureTextEntry}
+                   />
+                )}
             />
         </View>
     )
