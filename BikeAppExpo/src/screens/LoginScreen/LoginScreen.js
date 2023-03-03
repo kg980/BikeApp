@@ -13,8 +13,10 @@ const LoginScreen = () => {
     const[password, setPassword] =  useState(''); //read input from the app
     const navigation = useNavigation();
     const {height} = useWindowDimensions();
-
-    const {control, handleSubmit}  = useForm(); //handlesubmit is for validation  (ensure correct format has been enterred), then send data to the server
+    
+    //handlesubmit is for validation  (ensure correct format has been enterred), then send data to the server
+    const {control, handleSubmit, formState: {errors}}  = useForm(); 
+    console.log(errors);
 
     const logInSubmitPressed = (data) => {
         //validate user
@@ -35,17 +37,19 @@ const LoginScreen = () => {
             
             
                 <CustomInput 
-                    fieldname={username}
+                    name={username}
                     placeholder="Username" 
                     control={control}
+                    rules={{required: true}}
                 />
 
 
                 <CustomInput 
-                    fieldname={password}
+                    name={password}
                     placeholder="Password" 
                     secureTextEntry={true}
                     control={control}
+                    rules={{required: true}}
                 />
 
             </KeyboardAvoidingView>
