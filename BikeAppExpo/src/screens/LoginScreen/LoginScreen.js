@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 //screen which allows you to enter your login details and log in.
 
 const LoginScreen = () => {
-    const[username, setUsername] = useState('');  //read  input from the app
+    const[username, setUsername] = useState('');  //read input from the app
     const[password, setPassword] =  useState(''); //read input from the app
     const navigation = useNavigation();
 
