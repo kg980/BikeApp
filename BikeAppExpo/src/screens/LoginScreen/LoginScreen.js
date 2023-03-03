@@ -4,7 +4,7 @@ import LoginLogo from "../../../assets/images/LoginLogo.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-
+import { auth } from "../../../firebase";
 //screen which allows you to enter your login details and log in.
 
 const LoginScreen = () => {
@@ -15,15 +15,23 @@ const LoginScreen = () => {
     const {height} = useWindowDimensions();
 
     const logInEnterPressed = () => {
-        console.warn("Authenticating");
         //validate user
+        auth
+            .signInWithEmailAndPassword(username, password)
+            .then(userCredentials => {
+                const user = userCredentials.user;
+                //console.log('Logged in as: ', user.username);
+                
+                //navigate to home screen
+                navigation.navigate("HomeScreen");
+                    
+            })
+            .catch(error => alert(error.message))
 
-        //navigate to home screen
-        navigation.navigate("HomeScreen");
     };
     const forgotPassPressed = () => {
         //authenticate
-        console.warn("Forgot Password");
+        console.warn("Forgot Password doesnt work yet :)");
     };
 
     return (

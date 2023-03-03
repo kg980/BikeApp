@@ -1,5 +1,5 @@
 import React , {useState} from "react";
-import { View, Text, Image, StyleSheet, useWindowDimensions} from 'react-native';
+import { View, Text, Image, StyleSheet, useWindowDimensions, Alert} from 'react-native';
 import LoginLogo from "../../../assets/images/LoginLogo.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
@@ -19,16 +19,23 @@ const SignUpScreen = () => {
 
     const signUpPressed = () => {
         //authenticate
-        auth
-        .createUserWithEmailAndPassword(username, password)
-        .then(userCredentials => {
-            const user = userCredentials.user;
-            console.log(user.username);
-        })
-        .catch(error => alert(error.message))
+        if (confirmPassword === password){
 
-        //navigate to login screen
-        //navigation.navigate("LoginScreen")
+            auth
+            .createUserWithEmailAndPassword(username, password)
+            .then(userCredentials => {
+                const user = userCredentials.user;
+                //console.log('Signed up as: ', user.username);
+            })
+            .catch(error => alert(error.message))
+
+            //navigate to login screen
+            navigation.navigate("LoginScreen")
+
+        } else {
+            Alert.alert("Passwords do not match.")
+        }
+
     };
     const backToLoginPressed = () => {
         //authenticate
@@ -40,7 +47,7 @@ const SignUpScreen = () => {
         <View style={styles.root}>
             <Image source={LoginLogo} style={[styles.logo, {height: height *  0.5}]} resizeMode="contain"/>
 
-            <CustomInput placeholder="Username@testbikeapp.com" value={username} setValue={setUsername()}/>
+            <CustomInput placeholder="Username@pumpit.com" value={username} setValue={setUsername}/>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
             <CustomInput placeholder="Confirm Password" value={confirmPassword} setValue={setConfirmPassword} secureTextEntry={true}/>
             
