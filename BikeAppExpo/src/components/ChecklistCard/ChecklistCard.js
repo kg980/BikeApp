@@ -8,6 +8,7 @@ import CustomButton from "../CustomButton";
 
 const ForumCard = ({Task, Info, isCustom, DeleteTask}) => {
     const [showContent, setShowContent] = useState(false);
+    const [isComplete, setIsComplete] = useState(false);
 
     let renderButton;
     isCustom=='true' ? (renderButton =                      //'isCustom' only applies to user-made tasks. Mandatory tasks cannot be deleted, so we hide the button.
@@ -39,7 +40,13 @@ const ForumCard = ({Task, Info, isCustom, DeleteTask}) => {
 
                             {renderButton}
 
-                            <TouchableOpacity style={styles.checkBox}></TouchableOpacity>
+                             
+                            <TouchableOpacity style={styles.checkBox} onPress={() => setIsComplete(!isComplete)}>
+                                {isComplete && (
+                                    <View style={styles.checkBoxComplete}/>
+                                )}
+                            </TouchableOpacity>
+                            
                         </View>
 
                     </View>
@@ -81,6 +88,20 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         height: 25,
         width: 25,
+        borderRadius: 8,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        //padding: '5%',
+    },
+    checkBoxComplete: {
+        //fontWeight: 'bold',
+        fontSize: 16,
+        backgroundColor: 'green',
+        borderColor: 'green',
+        borderWidth: 2,
+        height: 18,
+        width: 18,
         borderRadius: 8,
     },
     titleText: {
