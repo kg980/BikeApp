@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable, Image} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import CustomButton from "../CustomButton";
 import GoButton from "../../../assets/images/GoButton3.png";
 import { useNavigation } from "@react-navigation/native";
@@ -24,16 +24,16 @@ const CustomFooter = ({isGo}) => {
     let footerButton;
     isGo=='true' ? (footerButton = 
     <View style={styles.root}>
-        <Pressable onPress={goStartPressed}>
+        <TouchableOpacity onPress={goStartPressed}>
         <Image source={GoButton} styles={styles.go}/>
-        </Pressable>
+        </TouchableOpacity>
     </View>) 
     : 
     (footerButton = 
     <View style={styles.root}>
-        <Pressable onPress={goNavPressed}>
+        <TouchableOpacity onPress={goNavPressed}>
             <Image source={GoButton} styles={styles.go}/>
-        </Pressable>
+        </TouchableOpacity>
     </View>);
     //conditional to render button to start a journey if 'isGo' prop is true, navigate to the journey page if false/null.
     
