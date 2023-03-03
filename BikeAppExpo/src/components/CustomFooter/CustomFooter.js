@@ -15,7 +15,7 @@ const CustomFooter = ({isGo}) => {
     };
 
     const goStartPressed = () => {
-        //start journey timer
+        //start journey timer 
         console.warn("Starting Journey");
 
     };
