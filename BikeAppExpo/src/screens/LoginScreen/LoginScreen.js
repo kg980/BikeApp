@@ -1,5 +1,5 @@
 import React , {useEffect, useState} from "react";
-import { View, Text, Image, StyleSheet, useWindowDimensions} from 'react-native';
+import { View, Text, Image, StyleSheet, useWindowDimensions, KeyboardAvoidingView, ScrollView} from 'react-native';
 import LoginLogo from "../../../assets/images/LoginLogo.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
@@ -47,8 +47,12 @@ const LoginScreen = () => {
     return (
         <View style={styles.root}>
             <Image source={LoginLogo} style={[styles.logo, {height: height *  0.5}]} resizeMode="contain"/>
-            <CustomInput placeholder="Username" value={username} setValue={setUsername}/>
-            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+
+            <KeyboardAvoidingView behavior="height">
+                <CustomInput placeholder="Username" value={username} setValue={setUsername}/>
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+            </KeyboardAvoidingView>
+            
             <CustomButton text="Log In" onPress={logInEnterPressed} type='primary'/>
             <CustomButton text="Forgot Password" onPress={forgotPassPressed} type='tertiary'/>
         </View>
@@ -61,6 +65,7 @@ const styles = StyleSheet.create({
         //alignItems: 'center',
         padding: 20,
         backgroundColor: 'white',
+        height: '100%',
     },
     logo: {
         alignItems: 'center',

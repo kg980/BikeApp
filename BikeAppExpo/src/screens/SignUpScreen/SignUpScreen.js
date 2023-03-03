@@ -46,11 +46,13 @@ const SignUpScreen = () => {
     return (
         <View style={styles.root}>
             <Image source={LoginLogo} style={[styles.logo, {height: height *  0.5}]} resizeMode="contain"/>
-
-            <CustomInput placeholder="Username@pumpit.com" value={username} setValue={setUsername}/>
-            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-            <CustomInput placeholder="Confirm Password" value={confirmPassword} setValue={setConfirmPassword} secureTextEntry={true}/>
             
+            <KeyboardAvoidingView behavior="height">
+                <CustomInput placeholder="Username@pumpit.com" value={username} setValue={setUsername}/>
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+                <CustomInput placeholder="Confirm Password" value={confirmPassword} setValue={setConfirmPassword} secureTextEntry={true}/>
+            </KeyboardAvoidingView>
+
             <CustomButton text="Create Account" onPress={signUpPressed} type='primary'/>
             <CustomButton text="Back to login" onPress={backToLoginPressed} type='tertiary'/>
         </View>

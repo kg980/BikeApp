@@ -1,33 +1,80 @@
 import React , {useState} from "react";
-import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView} from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView, TextInput, Keyboard} from 'react-native';
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
-import CustomCard from "../../components/CustomCard";
-import { useNavigation } from "@react-navigation/native";
+import ChecklistCard from "../../components/ChecklistCard";
+import DeleteIcon from "../../../assets/images/DeleteIcon.png";
+
 
 //screen for distance tracker and navigation buttons
 
 const MaintenanceChecklistScreen = () => {
-    const addButtonClicked = () => {
-        console.warn("Add Task Clicked");
-    };
+
+    const [task, setTask] = useState();
+    const [taskItems, setTaskItems] = useState([]); //state for an ARRAY, hence [] in the brackets.
+
+    const addTaskPressed = () => { 
+        Keyboard.dismiss();
+        setTaskItems([...taskItems, task]) //puts out everything that was in taskItems as a new array, and appends the new task to it.
+        setTask(null); //clears the textInput box after you've appended the item to the array.
+    }
+
+    const deleteTask = (index) => {
+        let itemsCopy = [...taskItems]; //creates a copy of the original task list array
+        itemsCopy.splice(index, 1); //removes item at {index}
+        setTaskItems(itemsCopy); //replace original array with the copy, which is missing the deleted item.
+    }
+
+
 
 
     return (
         <View style={styles.root}>
-            <CustomBanner 
-                text='Maintenance History' 
-                ButtonL={<CustomButton text='   ' type='icon'/>} 
-                ButtonR={<CustomButton text="+" type='icon' onPress={addButtonClicked}/>}
-                />
+            <CustomBanner text='Maintenance Checklist'/>
+            
+            {/* Tasks */}
+            <ScrollView>    
+                <View style={styles.content}>
+                    {/*MANDATORY TASKS*/}
+                    <ChecklistCard
+                        Task="Tyre Pressure"
+                        Info="IHJGOIRESHGSFDLIGHVNEIGHWEWIOGVNESLKGJHNITUHNGLTHGVJRIWNJHVTWRHVINVIWNVW"
+                    />
 
-            <View style={styles.content}>
-                <Text>Maintenance Checklist</Text>
-            </View>
+                    {/*user-made CUSTOM TASKS*/}
+                    {
+                        taskItems.map((item, index) => {  //iterate through the taskItems array, for each item render a task card
+                            
+                            let deleteButton = 
+                            <TouchableOpacity key={index} onPress={() => deleteTask(index)}>
+                                <Image source={DeleteIcon} style={styles.icons}/>
+                            </TouchableOpacity>;
+
+                            return <ChecklistCard Task={item} isCustom='true' DeleteButton={deleteButton}/>
+                        })
+                    }
+                </View>
+            </ScrollView>
+
+            {/* user-added tasks */}
+
+        
+            <KeyboardAvoidingView
+                behavior="height"
+                style={styles.writeTaskDivider}
+            >
+                <View style={styles.writeTaskContainer}>
+                    <TextInput style={styles.TaskInputText} placeholder={'Add a task'} value={task} onChangeText={text => setTask(text)}/>
+                </View>
+                
+                <TouchableOpacity onPress={() => addTaskPressed()} style={styles.addButton}><Text style={styles.addButtonText}>+</Text></TouchableOpacity>
+
+            </KeyboardAvoidingView>
 
             <CustomFooter isGo='false'/>
         </View>
+        
     );
 };
 
@@ -58,33 +105,44 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         flex: 5,
     },
-    bikes: {
+    writeTaskDivider: {
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        height: '15%',
+        flexDirection: 'row',
+        //backgroundColor: 'red',
+        alignItems: 'stretch',
+        height: '8%',
+    },
+    writeTaskContainer: {
+        //backgroundColor: 'red',
+        borderRadius: 10,
+        borderColor: '#EDEDED',
+        //backgroundColor: '#EDEDED',
+        borderWidth: 1,
+        padding: '3%',
+        //height: '100%',
+        flex: 8,
+    },
+    TaskInputText:  {
+        padding: '2%',
+        fontSize: 16,
+    },
+    addButton: {
+        borderRadius: 10,
+        borderColor: '#EDEDED',
+        borderWidth: 1,
+        padding: '3%',
+        flex: 1,
         alignItems: 'center',
-        //marginBottom: 'auto',
-        backgroundColor: '#EDEDED',
-        borderColor: '#EDEDED',
-        borderWidth: 1,
-        borderRadius: 15,
-        marginTop: 0,
     },
-    bikesText: {
-        fontSize: 22,
-        fontWeight: 'bold',
+    addButtonText: {
+        fontSize: 24,
+        padding: '2%',
+        //backgroundColor: 'red',
     },
-    logo: {
-        borderColor: '#EDEDED',
-        borderWidth: 1,
-        borderRadius: 15,
-        maxHeight: 250,
-        maxWidth: 450,
-        width: "100%",
-    },
-    partsContainer: {
-        backgroundColor: 'white',
+    icons: {
+        height: 20,
+        width: 20,
+        marginHorizontal: '2%',
     },
 });
 

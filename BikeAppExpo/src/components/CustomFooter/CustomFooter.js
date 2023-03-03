@@ -25,7 +25,7 @@ const CustomFooter = ({isGo}) => {
     isGo=='true' ? (footerButton = 
     <View style={styles.root}>
         <TouchableOpacity onPress={goStartPressed}>
-        <Image source={GoButton} styles={styles.go}/>
+        <Image source={GoButton} styles={styles.go} resizeMethod="scale"/>
         </TouchableOpacity>
     </View>) 
     : 
@@ -56,6 +56,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     go: {
+        height: 10,
+        width: 10,
     },
 });
 

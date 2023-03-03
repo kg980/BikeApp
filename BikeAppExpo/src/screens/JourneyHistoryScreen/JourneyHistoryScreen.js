@@ -1,12 +1,9 @@
 import React , {useState} from "react";
 import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView} from 'react-native';
-import Bicycle from "../../../assets/images/Bicycle.png";
-import BicycleRed from "../../../assets/images/BicycleRed.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
-import JourneyCard from "../../components/JourneyCard";
 import CustomCard from "../../components/CustomCard";
 
 //screen for distance tracker and navigation buttons

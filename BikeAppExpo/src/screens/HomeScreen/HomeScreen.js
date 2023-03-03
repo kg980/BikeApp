@@ -16,25 +16,21 @@ const HomeScreen = () => {
     const navigation = useNavigation();
     const myBikesPressed = () => {
         //
-        console.warn("Load My Bikes Page");
         navigation.navigate("PartsScreen");
     };
 
     const forumPressed = () => {
         //
-        console.warn("Load Forum Page");
         navigation.navigate("ForumScreen");
     };
 
     const maintListPressed = () => {
         //
-        console.warn("Load maintenance Checklist Page");
         navigation.navigate("MaintenanceChecklistScreen");
     };
 
     const journeysPressed = () => {
         //
-        console.warn("Load Journey History Page");
         navigation.navigate("JourneyHistoryScreen");
     };
     const pumpIt = () => {

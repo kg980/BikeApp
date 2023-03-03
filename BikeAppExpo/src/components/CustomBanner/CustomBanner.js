@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import CustomButton from "../../components/CustomButton";
 
 const CustomBanner = ({text, ButtonL, ButtonR}) => {
@@ -7,9 +7,9 @@ const CustomBanner = ({text, ButtonL, ButtonR}) => {
         <View>
         <View style={styles.strip}><Text>Strip</Text></View>
         <View style={styles.root}>
-            <Pressable>{ButtonL}</Pressable>
+            <TouchableOpacity>{ButtonL}</TouchableOpacity>
             <Text style={styles.text}>{text}</Text>
-            <Pressable>{ButtonR}</Pressable>
+            <TouchableOpacity>{ButtonR}</TouchableOpacity>
         </View>
         </View>
     )
