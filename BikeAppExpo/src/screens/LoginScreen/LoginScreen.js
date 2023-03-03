@@ -1,4 +1,4 @@
-import React , {useState} from "react";
+import React , {useEffect, useState} from "react";
 import { View, Text, Image, StyleSheet, useWindowDimensions} from 'react-native';
 import LoginLogo from "../../../assets/images/LoginLogo.png";
 import CustomInput from "../../components/CustomInput";
@@ -14,6 +14,19 @@ const LoginScreen = () => {
 
     const {height} = useWindowDimensions();
 
+    useEffect(() => { //listener to test whether or not a user has logged in.
+        const unsubscribe = auth.onAuthStateChanged(user  => {
+            if (user) {
+                //if a user exists (i.e. when someone has successfully logged in, firebase auth changes state)
+                //navigate to home screen
+                navigation.navigate("HomeScreen");
+            }
+        })
+
+        return unsubscribe //when leave this screen, app unsubscribes from this listener so that we stop pinging for user login. We only need this at the start, on this screen.
+
+    }, []) //empty array to ensure this listener only runs once.
+
     const logInEnterPressed = () => {
         //validate user
         auth
@@ -21,10 +34,7 @@ const LoginScreen = () => {
             .then(userCredentials => {
                 const user = userCredentials.user;
                 //console.log('Logged in as: ', user.username);
-                
-                //navigate to home screen
-                navigation.navigate("HomeScreen");
-                    
+
             })
             .catch(error => alert(error.message))
 

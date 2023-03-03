@@ -1,5 +1,5 @@
 import React , {useState} from "react";
-import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView} from 'react-native';
+import { View, Text, Image, StyleSheet, useWindowDimensions, TouchableOpacity, ScrollView} from 'react-native';
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
@@ -24,7 +24,7 @@ const ForumScreen = () => {
         <View style={styles.root}>
             <CustomBanner 
                 text='Forum' 
-                ButtonL=<Pressable onPress={searchButtonClicked}><Image source={SearchIcon} resizeMode="contain" style={styles.bannerIcons}/></Pressable>
+                ButtonL=<TouchableOpacity onPress={searchButtonClicked}><Image source={SearchIcon} resizeMode="contain" style={styles.bannerIcons}/></TouchableOpacity>
                 ButtonR={<CustomButton text="+" type='icon' onPress={addButtonClicked}/>}
                 />
             <View style={styles.content}>

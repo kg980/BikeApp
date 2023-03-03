@@ -1,12 +1,14 @@
 import React , {useState} from "react";
-import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable} from 'react-native';
+import { View, Text, Image, StyleSheet, useWindowDimensions, TouchableOpacity} from 'react-native';
 import Bicycle from "../../../assets/images/Bicycle.png";
 import BicycleRed from "../../../assets/images/BicycleRed.png";
+import LogoutIcon from "../../../assets/images/LogoutIcon.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
 import { useNavigation } from "@react-navigation/native";
+import { auth } from "../../../firebase";
 
 //screen for distance tracker and navigation buttons
 
@@ -41,17 +43,31 @@ const HomeScreen = () => {
         //add record to maintenance history
         console.warn("Reset Distance");
     };
+    const logoutPressed = () => {
+        //logout user
+        auth.signOut()
+        .then(() => navigation.replace("LoginOptionsScreen")) 
+        //must use REPLACE not NAVIGATE because we dont want to  add the  login page to the stack 
+        //(user would be able  to swipe back and access the home screen)
+        .catch(error => alert(error.message)) 
+        
+    };
     
 
     return (
         <View style={styles.root}>
-            <CustomBanner text='Profile'/>
+            <CustomBanner 
+                text='Profile' 
+                ButtonL={<CustomButton text='   ' type='icon'/>} 
+                ButtonR={<TouchableOpacity onPress={logoutPressed}><Image style={styles.icons} source={LogoutIcon}/></TouchableOpacity>}
+
+                />
             <View style={styles.content}>
                 <View style={styles.distance}>
                     <Image source={Bicycle} resizeMode="contain"/>
                     <Text style={styles.distanceText}>/4000km</Text>
                     <Text style={styles.meter}></Text>
-                    <Pressable onPress={pumpIt} style={styles.pumpIt}><Text style={styles.pumpItText}>PumpIt!</Text></Pressable>
+                    <TouchableOpacity onPress={pumpIt} style={styles.pumpIt}><Text style={styles.pumpItText}>PumpIt!</Text></TouchableOpacity>
                 </View>
                 <View style={styles.buttonsBox}>
                     <View style={styles.buttonsCol}>
@@ -168,6 +184,11 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderColor: 'white',
         },
+    icons: {
+        height: 40,
+        width: 40,
+        marginHorizontal: 8,
+    }
 });
 
 export default HomeScreen;

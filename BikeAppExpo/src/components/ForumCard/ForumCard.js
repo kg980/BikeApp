@@ -1,5 +1,5 @@
 import React, { useState, useTransition } from "react";
-import { View, Text, StyleSheet, Pressable, Image, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import EditIcon from "../../../assets/images/EditIcon.png";
 import DeleteIcon from "../../../assets/images/DeleteIcon.png";
 import ReplyIcon from "../../../assets/images/ReplyIcon.png";
@@ -25,9 +25,9 @@ const ForumCard = ({Title, Body, EditAction, DeleteAction, ReplyAction}) => {
                     </View>
                     
                     <View style={styles.iconButtons}>
-                        <Pressable><Image source={EditIcon} resizeMode="contain" style={styles.icons} onPress={EditAction}/></Pressable>
-                        <Pressable><Image source={DeleteIcon} resizeMode="contain" style={styles.icons} onPress={DeleteAction}/></Pressable>
-                        <Pressable><Image source={ReplyIcon} resizeMode="contain" style={styles.icons} onPress={ReplyAction}/></Pressable>
+                        <TouchableOpacity><Image source={EditIcon} resizeMode="contain" style={styles.icons} onPress={EditAction}/></TouchableOpacity>
+                        <TouchableOpacity><Image source={DeleteIcon} resizeMode="contain" style={styles.icons} onPress={DeleteAction}/></TouchableOpacity>
+                        <TouchableOpacity><Image source={ReplyIcon} resizeMode="contain" style={styles.icons} onPress={ReplyAction}/></TouchableOpacity>
                     </View>
                     
                     <TouchableOpacity>
