@@ -4,6 +4,7 @@ import LoginLogo from "../../../assets/images/LoginLogo.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
+import { auth } from "../../../firebase";
 
 //screen which allows you to enter your login details and log in.
 
@@ -14,10 +15,20 @@ const SignUpScreen = () => {
     const navigation = useNavigation();
     const {height} = useWindowDimensions();
 
+
+
     const signUpPressed = () => {
         //authenticate
-        console.warn("Authenticating");
-        navigation.navigate("LoginScreen")
+        auth
+        .createUserWithEmailAndPassword(username, password)
+        .then(userCredentials => {
+            const user = userCredentials.user;
+            console.log(user.username);
+        })
+        .catch(error => alert(error.message))
+
+        //navigate to login screen
+        //navigation.navigate("LoginScreen")
     };
     const backToLoginPressed = () => {
         //authenticate
@@ -28,9 +39,11 @@ const SignUpScreen = () => {
     return (
         <View style={styles.root}>
             <Image source={LoginLogo} style={[styles.logo, {height: height *  0.5}]} resizeMode="contain"/>
-            <CustomInput placeholder="Username" value={username} setValue={setUsername}/>
+
+            <CustomInput placeholder="Username@testbikeapp.com" value={username} setValue={setUsername()}/>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
             <CustomInput placeholder="Confirm Password" value={confirmPassword} setValue={setConfirmPassword} secureTextEntry={true}/>
+            
             <CustomButton text="Create Account" onPress={signUpPressed} type='primary'/>
             <CustomButton text="Back to login" onPress={backToLoginPressed} type='tertiary'/>
         </View>
