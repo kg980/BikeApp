@@ -6,12 +6,14 @@ import CustomButton from "../CustomButton";
 
 
 
-const ForumCard = ({Task, Info, isCustom, DeleteButton}) => {
+const ForumCard = ({Task, Info, isCustom, DeleteTask}) => {
     const [showContent, setShowContent] = useState(false);
 
     let renderButton;
     isCustom=='true' ? (renderButton =                      //'isCustom' only applies to user-made tasks. Mandatory tasks cannot be deleted, so we hide the button.
-        {DeleteButton}
+        <TouchableOpacity onPress={DeleteTask}>
+            <Image source={DeleteIcon} style={styles.icons}/>
+        </TouchableOpacity>
     ) 
     : 
     (renderButton = 

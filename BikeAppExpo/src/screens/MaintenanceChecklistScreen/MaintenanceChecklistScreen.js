@@ -41,17 +41,27 @@ const MaintenanceChecklistScreen = () => {
                         Task="Tyre Pressure"
                         Info="IHJGOIRESHGSFDLIGHVNEIGHWEWIOGVNESLKGJHNITUHNGLTHGVJRIWNJHVTWRHVINVIWNVW"
                     />
+                    <ChecklistCard
+                        Task="Tyre Pressure"
+                        Info="IHJGOIRESHGSFDLIGHVNEIGHWEWIOGVNESLKGJHNITUHNGLTHGVJRIWNJHVTWRHVINVIWNVW"
+                    />
+                    <ChecklistCard
+                        Task="Tyre Pressure"
+                        Info="IHJGOIRESHGSFDLIGHVNEIGHWEWIOGVNESLKGJHNITUHNGLTHGVJRIWNJHVTWRHVINVIWNVW"
+                    />
+                    <ChecklistCard
+                        Task="Tyre Pressure"
+                        Info="IHJGOIRESHGSFDLIGHVNEIGHWEWIOGVNESLKGJHNITUHNGLTHGVJRIWNJHVTWRHVINVIWNVW"
+                    />
+                    <ChecklistCard
+                        Task="Tyre Pressure"
+                        Info="IHJGOIRESHGSFDLIGHVNEIGHWEWIOGVNESLKGJHNITUHNGLTHGVJRIWNJHVTWRHVINVIWNVW"
+                    />
 
                     {/*user-made CUSTOM TASKS*/}
                     {
                         taskItems.map((item, index) => {  //iterate through the taskItems array, for each item render a task card
-                            
-                            let deleteButton = 
-                            <TouchableOpacity key={index} onPress={() => deleteTask(index)}>
-                                <Image source={DeleteIcon} style={styles.icons}/>
-                            </TouchableOpacity>;
-
-                            return <ChecklistCard Task={item} isCustom='true' DeleteButton={deleteButton}/>
+                            return <ChecklistCard Task={item} isCustom='true' key={index} DeleteTask={() => deleteTask(index)}/>
                         })
                     }
                 </View>
