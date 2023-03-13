@@ -1,5 +1,5 @@
 import React , {useState} from "react";
-import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView} from 'react-native';
+import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView, Modal} from 'react-native';
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
@@ -9,8 +9,28 @@ import CustomCard from "../../components/CustomCard";
 //screen for distance tracker and navigation buttons
 
 const JourneyHistoryScreen = () => {
+
+    const[showModal, setShowModal] = useState('false');
+    const[distance, setDistance] = useState('');
+    const[time, setTime] = useState('');
+
     const addButtonClicked = () => {
-        console.warn("Add Bike Clicked");
+        //console.warn("Add Bike Clicked");
+        setShowModal(true);
+    };
+
+    const submitModal = () => {
+        console.warn("submitModal");
+    };
+
+    const hideModal = () => {
+        //console.warn("hideModal");
+        //hide the add part pop up modal:
+        setShowModal(false);
+
+        //clear inputs:
+        setDistance(null)
+        setTime(null)
     };
 
 
@@ -26,6 +46,25 @@ const JourneyHistoryScreen = () => {
                 <View style={styles.bikes}>
                     <Pressable><Text style={styles.bikesText}>Bike1</Text></Pressable>
                 </View>
+
+                <Modal transparent={true} visible={showModal}>
+                    <View style={styles.modalbg}>
+                        <View style={styles.modal}>
+                            <View style={styles.modal_titleContainer}>
+                                <Text style={styles.modal_title}>Add a Journey</Text>
+                            </View>
+
+                            <CustomInput placeholder='Distance' value={distance} setValue={setDistance} multiline={true}/>
+                            <CustomInput placeholder='Time (seconds)' value={time} setValue={setTime} multiline={true}/>
+                                
+                            <View style={styles.modalButtons}>
+                                <CustomButton text="Submit" onPress={submitModal} type='primary'/>
+                                <CustomButton text="Discard" onPress={hideModal} type='secondary'/>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
                 <ScrollView style={styles.partsContainer}>
                     <CustomCard Title="Date"  Var1="Distance (km)" Var2="Time (min/sec)"/>
                 </ScrollView>
@@ -89,6 +128,34 @@ const styles = StyleSheet.create({
     },
     partsContainer: {
         backgroundColor: 'white',
+    },
+    modal: {
+        height: 450,
+        display: 'flex',
+        padding: '5%',
+        backgroundColor: 'lightgrey',
+        margin: '5%',
+        borderWidth: 1,
+        borderRadius: 15,
+        borderColor: 'lightgrey',
+    },
+    modal_title: {
+        padding: '2%',
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    modal_titleContainer: {
+        alignSelf: 'center',
+    },
+    modalbg: {
+        backgroundColor: '#000000aa',
+        height: '100%',
+    },
+    modalButtons: {
+        marginTop: '5%',
+        paddingTop: '5%',
+        borderTopColor: '#b0b0b0',
+        borderTopWidth: 1,
     },
 });
 

@@ -67,8 +67,8 @@ const PartsScreen = () => {
                                 <Text style={styles.modal_title}>Add a part</Text>
                             </View>
 
-                            <CustomInput placeholder="Part Name" value={part} setValue={setPart}/>
-                            <CustomInput placeholder="Description" value={description} setValue={setDescription} size='big'/>
+                            <CustomInput placeholder="Part Name" value={part} setValue={setPart} multiline={true}/>
+                            <CustomInput placeholder="Description" value={description} setValue={setDescription} size='big' multiline={true}/>
                             
                             <View>
                                 <CustomButton text="Submit" onPress={submitModal} type='primary'/>
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     modal: {
-        height: '75%',
+        height: 550,
         display: 'flex',
         padding: '5%',
         backgroundColor: 'lightgrey',
