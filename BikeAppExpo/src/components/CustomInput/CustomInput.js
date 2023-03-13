@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-const CustomInput = ({value, setValue, placeholder, secureTextEntry}) => {
+const CustomInput = ({value, setValue, placeholder, secureTextEntry, size}) => {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, styles[`container_${size}`]]}>
             <TextInput 
             value={value}
             onChangeText={setValue}
@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     text: {},
+    container_big: {
+        height: 200,
+    },
 });
 
 export default CustomInput

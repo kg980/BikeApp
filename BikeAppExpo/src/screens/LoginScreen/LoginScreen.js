@@ -4,41 +4,48 @@ import LoginLogo from "../../../assets/images/LoginLogo.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import { auth } from "../../../firebase";
+//import { auth } from "../../../firebase";
+import { authentication } from "../../../firebase";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+
 //screen which allows you to enter your login details and log in.
 
 const LoginScreen = () => {
     const[username, setUsername] = useState('');  //read input from the app
     const[password, setPassword] =  useState(''); //read input from the app
     const navigation = useNavigation();
-
     const {height} = useWindowDimensions();
 
-    useEffect(() => { //listener to test whether or not a user has logged in.
-        const unsubscribe = auth.onAuthStateChanged(user  => {
+    //updates because of firebase v9:
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+     
+    useEffect(() => { //listener to test whether or not a user has logged in. Updated to firebase v9 version
+        const unsubscribe = onAuthStateChanged(authentication, (user)  => {
             if (user) {
+                const uid = user.uid;
                 //if a user exists (i.e. when someone has successfully logged in, firebase auth changes state)
                 //navigate to home screen
-                navigation.navigate("HomeScreen");
+                navigation.replace("HomeScreen");
             }
         })
-
         return unsubscribe //when leave this screen, app unsubscribes from this listener so that we stop pinging for user login. We only need this at the start, on this screen.
-
     }, []) //empty array to ensure this listener only runs once.
+    
 
     const logInEnterPressed = () => {
         //validate user
-        auth
-            .signInWithEmailAndPassword(username, password)
-            .then(userCredentials => {
-                const user = userCredentials.user;
-                //console.log('Logged in as: ', user.username);
+        signInWithEmailAndPassword(authentication, username, password)
+        .then((re) => {
+            //const user = userCredentials.user;
+            //setIsLoggedIn(true);
+        })
+        .catch((re)=>{
+            console.log(re);
+            alert(re.message);
+        }) 
+    }
 
-            })
-            .catch(error => alert(error.message))
-
-    };
     const forgotPassPressed = () => {
         //authenticate
         console.warn("Forgot Password doesnt work yet :)");

@@ -5,7 +5,7 @@ import CustomButton from "../../components/CustomButton";
 const CustomBanner = ({text, ButtonL, ButtonR}) => {
     return (
         <View>
-        <View style={styles.strip}><Text>Strip</Text></View>
+        <View style={styles.strip}></View>
         <View style={styles.root}>
             <TouchableOpacity>{ButtonL}</TouchableOpacity>
             <Text style={styles.text}>{text}</Text>

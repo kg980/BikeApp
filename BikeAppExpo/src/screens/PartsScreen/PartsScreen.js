@@ -1,5 +1,5 @@
 import React , {useState} from "react";
-import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView} from 'react-native';
+import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView, Modal} from 'react-native';
 import Bicycle from "../../../assets/images/Bicycle.png";
 import BicycleRed from "../../../assets/images/BicycleRed.png";
 import CustomInput from "../../components/CustomInput";
@@ -8,16 +8,39 @@ import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
 import PartsCard from "../../components/PartsCard";
 import CustomCard from "../../components/CustomCard";
+import { authentication } from "../../../firebase";
+import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 
 //screen for distance tracker and navigation buttons
 
 const PartsScreen = () => {
+    const[part, setPart] = useState('');  //read input from the app
+    const[description, setDescription] =  useState(''); //read input from the app
+
+    const[showModal, setShowModal] = useState('false');
+
     const addButtonClicked = () => {
-        console.warn("Add Bike Clicked");
+        //console.warn("Add Bike Clicked");
+        //show the modal pop up for parts input
+        setShowModal(true);
     };
 
     const changeBikeName = () => {
         console.warn("changeBikeName");
+    };
+
+    const submitModal = () => {
+        console.warn("submitModal");
+    };
+
+    const hideModal = () => {
+        //console.warn("hideModal");
+        //hide the add part pop up modal:
+        setShowModal(false);
+
+        //clear inputs:
+        setPart(null)
+        setDescription(null)
     };
 
     return (
@@ -26,13 +49,35 @@ const PartsScreen = () => {
                 text='My Bikes' 
                 ButtonL={<CustomButton text='   ' type='icon'/>} 
                 ButtonR={<CustomButton text="+" type='icon' onPress={addButtonClicked}/>}
-            
                 />
+
             <View style={styles.content}>
+
+                
+
                 <View style={styles.bikes}>
                     <Pressable onPress={changeBikeName}><Text style={styles.bikesText}>Bike1</Text></Pressable>
                     <Image source={Bicycle} resizeMode="contain" style={styles.logo}/>
                 </View>
+
+                <Modal transparent={true} visible={showModal}>
+                    <View style={styles.modalbg}>
+                        <View style={styles.modal}>
+                            <View style={styles.modal_titleContainer}>
+                                <Text style={styles.modal_title}>Add a part</Text>
+                            </View>
+
+                            <CustomInput placeholder="Part Name" value={part} setValue={setPart}/>
+                            <CustomInput placeholder="Description" value={description} setValue={setDescription} size='big'/>
+                            
+                            <View>
+                                <CustomButton text="Submit" onPress={submitModal} type='primary'/>
+                                <CustomButton text="Discard" onPress={hideModal} type='secondary'/>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
                 <ScrollView style={styles.partsContainer}>
                     <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
                     <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
@@ -103,8 +148,29 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     partsContainer: {
-        
         backgroundColor: 'white',
+    },
+    modal: {
+        height: '75%',
+        display: 'flex',
+        padding: '5%',
+        backgroundColor: 'lightgrey',
+        margin: '5%',
+        borderWidth: 1,
+        borderRadius: 15,
+        borderColor: 'lightgrey',
+    },
+    modal_title: {
+        padding: '2%',
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    modal_titleContainer: {
+        alignSelf: 'center',
+    },
+    modalbg: {
+        backgroundColor: '#000000aa',
+        height: '100%',
     },
 });
 

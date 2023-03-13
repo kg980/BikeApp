@@ -8,11 +8,14 @@ import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
 import { useNavigation } from "@react-navigation/native";
-import { auth } from "../../../firebase";
+//import { auth } from "../../../firebase";
+import { authentication } from "../../../firebase";
+import { signOut } from "firebase/auth";
 
 //screen for distance tracker and navigation buttons
 
 const HomeScreen = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigation = useNavigation();
     const myBikesPressed = () => {
         //
@@ -41,8 +44,11 @@ const HomeScreen = () => {
     };
     const logoutPressed = () => {
         //logout user
-        auth.signOut()
-        .then(() => navigation.replace("LoginOptionsScreen")) 
+        signOut(authentication)
+        .then((re) => {
+            //setIsLoggedIn(false);
+            navigation.replace("LoginOptionsScreen")
+        })
         //must use REPLACE not NAVIGATE because we dont want to  add the  login page to the stack 
         //(user would be able  to swipe back and access the home screen)
         .catch(error => alert(error.message)) 

@@ -1,10 +1,12 @@
 import React , {useState} from "react";
-import { View, Text, Image, StyleSheet, useWindowDimensions, Alert} from 'react-native';
+import { View, Text, Image, StyleSheet, useWindowDimensions, Alert, KeyboardAvoidingView} from 'react-native';
 import LoginLogo from "../../../assets/images/LoginLogo.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import { auth } from "../../../firebase";
+//import { auth } from "../../../firebase";
+import { authentication } from "../../../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 //screen which allows you to enter your login details and log in.
 
@@ -21,13 +23,13 @@ const SignUpScreen = () => {
         //authenticate
         if (confirmPassword === password){
 
-            auth
-            .createUserWithEmailAndPassword(username, password)
-            .then(userCredentials => {
-                const user = userCredentials.user;
-                //console.log('Signed up as: ', user.username);
+            createUserWithEmailAndPassword(authentication,username,password)
+            .then((re) => {
+                console.log(re); //get result and log it
             })
-            .catch(error => alert(error.message))
+            .catch((re) => {
+                console.log(re);
+            })
 
             //navigate to login screen
             navigation.navigate("LoginScreen")
@@ -37,6 +39,7 @@ const SignUpScreen = () => {
         }
 
     };
+    
     const backToLoginPressed = () => {
         //authenticate
         console.warn("Back To Login");
