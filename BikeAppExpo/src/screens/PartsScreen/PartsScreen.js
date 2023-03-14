@@ -64,15 +64,16 @@ const PartsScreen = () => {
     const createPartData = async () => {
         //set vars from app State
         //const partId = user.uid; //corresponds to user ID
-        const RandomID = uuidv4(); //random number using the uuid package
+        //const RandomID = uuidv4(); //random number using the uuid package
         const PartValue = part;
         const BrandValue = brand;
         const DescriptionValue = description;
         const creationTimeStamp = dbTimeStamp.now();
     
         //create doc in DB
-        await setDoc(doc(db, "BikeParts", RandomID), { 
-            part_Id: user.uid,
+        await addDoc(collection(db, "BikeParts"), { //addDoc = auto-generates an ID. SetDoc = must specify an ID yourself. overwrites docs with same ID.
+            part_Id: user.uid, //in the future, can make this correspond to a particular bicycle ID instead, so that you can display parts corresponding to each bike.
+            //the bicycle Id can then correspond to the user ID to link it all to the user.
             part_name: PartValue,
             part_brand: BrandValue,
             part_description: DescriptionValue,
