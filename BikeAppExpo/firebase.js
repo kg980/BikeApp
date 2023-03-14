@@ -2,6 +2,7 @@
 //import * as firebase from "firebase";
 import { initializeApp } from "firebase/app";
 import { getAuth , createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore } from 'firebase/firestore/lite';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -18,6 +19,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const authentication = getAuth(app);
+export const db = getFirestore(app);
 
 {/* 
 let app;
