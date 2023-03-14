@@ -8,8 +8,10 @@ import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
 import PartsCard from "../../components/PartsCard";
 import CustomCard from "../../components/CustomCard";
-import { authentication, db } from "../../../firebase";
-import { collection, getDocs, doc, setDoc } from 'firebase/firestore/lite';
+import { authentication, db, dbTimeStamp } from "../../../firebase";
+import { collection, getDocs, doc, setDoc, addDoc } from 'firebase/firestore/lite';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 //screen for distance tracker and navigation buttons
 
@@ -62,17 +64,19 @@ const PartsScreen = () => {
     const createPartData = async () => {
         //set vars from app State
         //const partId = user.uid; //corresponds to user ID
-        const RandomID = "";
+        const RandomID = uuidv4(); //random number using the uuid package
         const PartValue = part;
         const BrandValue = brand;
         const DescriptionValue = description;
+        const creationTimeStamp = dbTimeStamp.now();
     
         //create doc in DB
         await setDoc(doc(db, "BikeParts", RandomID), { 
             part_Id: user.uid,
             part_name: PartValue,
             part_brand: BrandValue,
-            part_description: DescriptionValue
+            part_description: DescriptionValue,
+            part_timestamp: creationTimeStamp,
         }).then(() => {
             console.log("Data submitted")
         }).catch((error) => {
