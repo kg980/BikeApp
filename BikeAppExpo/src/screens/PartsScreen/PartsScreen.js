@@ -10,8 +10,9 @@ import PartsCard from "../../components/PartsCard";
 import CustomCard from "../../components/CustomCard";
 import { authentication, db, dbTimeStamp } from "../../../firebase";
 import { collection, getDocs, doc, setDoc, addDoc } from 'firebase/firestore/lite';
-import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
+//import 'react-native-get-random-values';
+//import { v4 as uuidv4 } from 'uuid';
+import PartsFetch from "./PartsFetch";
 
 //screen for distance tracker and navigation buttons
 
@@ -73,8 +74,7 @@ const PartsScreen = () => {
         //create doc in DB
         await addDoc(collection(db, "BikeParts"), { //addDoc = auto-generates an ID. SetDoc = must specify an ID yourself. overwrites docs with same ID.
             part_Id: user.uid, //in the future, can make this correspond to a particular bicycle ID instead, so that you can display parts corresponding to each bike.
-            //the bicycle Id can then correspond to the user ID to link it all to the user.
-            part_name: PartValue,
+            part_name: PartValue,                                                       //the bicycle Id can then correspond to the user ID to link it all to the user.
             part_brand: BrandValue,
             part_description: DescriptionValue,
             part_timestamp: creationTimeStamp,
@@ -128,15 +128,10 @@ const PartsScreen = () => {
                     </View>
                 </Modal>
 
-                <ScrollView style={styles.partsContainer}>
-                    <CustomCard Title="Part" TitleValue="TitleHere" Var1="Brand" Var1Value="BrandHere" Var2="Description" Var2Value="DescriptionHere"/>
-                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
-                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
-                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
-                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
-                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
-                    <CustomCard Title="Part"  Var1="Brand" Var2="Description"/>
-                </ScrollView>
+
+                <PartsFetch/>
+
+
             </View>
             <CustomFooter isGo='false'/>
         </View>

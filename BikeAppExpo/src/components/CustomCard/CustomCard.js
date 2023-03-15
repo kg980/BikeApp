@@ -2,6 +2,7 @@ import React, { useState, useTransition } from "react";
 import { View, Text, StyleSheet, Pressable, Image, TouchableOpacity} from 'react-native';
 import EditIcon from "../../../assets/images/EditIcon.png";
 import DeleteIcon from "../../../assets/images/DeleteIcon.png";
+import CustomButton from "../CustomButton";
 
 const CustomCard = ({Title, TitleValue, Var1, Var1Value, Var2, Var2Value, EditAction, DeleteAction}) => {
     const [showContent, setShowContent] = useState(false);
@@ -18,18 +19,18 @@ const CustomCard = ({Title, TitleValue, Var1, Var1Value, Var2, Var2Value, EditAc
             
             {showContent && ( //if showContent = true, then display the following:
                 <View style={styles.bodyContainer}>
-                    <Text style={styles.bodyText}>{Var1}: </Text>
+                    <Text style={styles.bodyTextHeader}>{Var1}: </Text>
                     <View style={styles.bodyInput}>
                         <Text style={styles.bodyText}>{Var1Value} </Text>
                     </View>
                     
-                    <Text style={styles.bodyText}>{Var2}: </Text>
+                    <Text style={styles.bodyTextHeader}>{Var2}: </Text>
                     <View style={styles.bodyInput}>
                         <Text style={styles.bodyText}>{Var2Value}</Text>
                     </View>
                     <View style={styles.iconButtons}>
-                        <Pressable><Image source={EditIcon} resizeMode="contain" style={styles.icons} onPress={EditAction}/></Pressable>
-                        <Pressable><Image source={DeleteIcon} resizeMode="contain" style={styles.icons} onPress={DeleteAction}/></Pressable>
+                        <TouchableOpacity onPress={EditAction}><Image source={EditIcon} resizeMode="contain" style={styles.icons}/></TouchableOpacity>
+                        <TouchableOpacity onPress={DeleteAction}><Image source={DeleteIcon} resizeMode="contain" style={styles.icons}/></TouchableOpacity>
                     </View>
                 </View>
             )}
@@ -73,6 +74,11 @@ const styles = StyleSheet.create({
     },
     bodyText: {
         padding: '2%',
+        fontSize: 16,
+    },
+    bodyTextHeader: {
+        padding: '2%',
+        color: 'grey',
     },
     iconButtons: {
         display: 'flex',
