@@ -1,4 +1,4 @@
-import React , {useState} from "react";
+import React , { useState, useReducer, useEffect } from "react";
 import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView, Modal} from 'react-native';
 import Bicycle from "../../../assets/images/Bicycle.png";
 import BicycleRed from "../../../assets/images/BicycleRed.png";
@@ -9,7 +9,7 @@ import CustomFooter from "../../components/CustomFooter";
 import PartsCard from "../../components/PartsCard";
 import CustomCard from "../../components/CustomCard";
 import { authentication, db, dbTimeStamp } from "../../../firebase";
-import { collection, getDocs, doc, setDoc, addDoc } from 'firebase/firestore/lite';
+import { collection, getDocs, doc, setDoc, addDoc, deleteDoc } from 'firebase/firestore/lite';
 //import 'react-native-get-random-values';
 //import { v4 as uuidv4 } from 'uuid';
 import PartsFetch from "./PartsFetch";
@@ -20,8 +20,22 @@ const PartsScreen = () => {
     const[part, setPart] = useState('');  //read input from the app
     const[description, setDescription] =  useState(''); //read input from the app
     const[brand, setBrand] =  useState(''); //read input from the app
-
     const[showModal, setShowModal] = useState('false');
+    const [partsList, setPartsList] = useState([]);
+    const partsCollectionRef = collection(db, 'BikeParts');
+    const [refreshMe, forceUpdate] = useReducer(x => x + 1, 0); //increment every time forceUpdate() is called
+    //emulates forceUpdate, as react re-renders whenever there is a state change (in this case, the state of 'refreshMe' will change as it increments). 
+    //DB change does not count as a state change from the app's perspective, and once useEffect runs to fetch data (at the start), it doesnt run again.
+    //so to make sure the screen refreshes every time there is a db update, i need this constant to increment (change state) therefore 
+    //force a re-render and show updated db info on the UI
+    const [editingPartName, setEditingPartName] = useState('');
+    const [editingPartId, setEditingPartId] = useState('');
+    const[showEditModal, setShowEditModal] = useState('false');
+    const [editingPartBrand, setEditingPartBrand] = useState('');
+    const [editingPartDescription, setEditingPartDescription] = useState('');
+
+
+
     const user = authentication.currentUser;
 
     const addButtonClicked = () => {
@@ -31,37 +45,41 @@ const PartsScreen = () => {
     };
 
     const changeBikeName = () => {
-        console.warn("changeBikeName");
+        console.warn("bike name edit not implemented");
     };
-
 
     const hideModal = () => {
         //console.warn("hideModal");
-        //hide the add part pop up modal:
-        setShowModal(false);
+        setShowModal(false); //hide the add part pop up modal:
+        setShowEditModal(false); //works for both modals
 
         //clear inputs:
         setPart(null)
         setDescription(null)
         setBrand(null)
+        
+        //clear editPart ID and name
+        //setEditingPartName(null)
+        //setEditingPartId(null)
+        //setEditingPartBrand(null)
+        //setEditingPartDescription(null)
     };
 
     //FIRESTORE IMPLEMENTATION:
-    const getPartData = async () => {
-        const partsCollection = collection(db, 'BikeParts');
-        const partsSnapshot = await getDocs(partsCollection); //gets all the docs from the specified collection
-        //create a list of all the parts
-        const partsList = partsSnapshot.docs.map(doc => doc.data());
 
-        const PartValue = "";
-        const BrandValue = "";
-        const DescriptionValue = "";
+    //FETCH DB DATA
+    useEffect(() => {
+        
+        const getPartsList = async () => { 
+        //this is an async function. Bad practise to make the useEffect async. 
+        //create a function inside the useEffect instead, then call the functions.
+            const partData = await getDocs(partsCollectionRef); //await  handles the promise
+            setPartsList(partData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        };
+        getPartsList();
+    }, [refreshMe])
 
-        return(
-            <CustomCard Title="Part" TitleValue="TitleHere" Var1="Brand" Var1Value="BrandHere" Var2="Description" Var2Value="DescriptionHere"/>
-        );
-    };
-
+    //ADD A DOC
     const createPartData = async () => {
         //set vars from app State
         //const partId = user.uid; //corresponds to user ID
@@ -84,13 +102,60 @@ const PartsScreen = () => {
             console.log(error);
         });
 
-        //clear the fields and close the modal
-        //setPart(null)
-        //setDescription(null)
-        //setShowModal(false);
+        //refresh & close pop-up
+        forceUpdate();
         hideModal();
-
     };
+
+    //DELETE DOC
+    const deletePart = async (id) => {
+        //console.warn("delete entry");
+        const partDoc = doc(db, "BikeParts", id);
+        await deleteDoc(partDoc);
+        //refresh to render updated DB on UI:
+        forceUpdate();
+    };
+
+    //UPDATE DOC - set states to show correct placeholders on the modal
+    const setEditPart = async (id, partName, Brand, Description)  => {
+        setEditingPartName(partName);
+        setEditingPartId(id);
+        setEditingPartBrand(Brand);
+        setEditingPartDescription(Description);
+        setShowEditModal(true);
+    };
+    //UPDATE DOC IN THE DB
+    const editPartData = async () => {
+        const PartValue = part;
+        const BrandValue = brand;
+        const DescriptionValue = description;
+        const creationTimeStamp = dbTimeStamp.now();
+    
+        //replace doc with the given ID in DB:
+        if(PartValue !== null){
+            //setDoc
+        }
+        else{
+            //ignore
+        }
+
+        await setDoc(collection(db, "BikeParts", editingPartId), {
+            part_name: PartValue,
+            part_brand: BrandValue,
+            part_description: DescriptionValue,
+            part_timestamp: creationTimeStamp,
+        }).then(() => {
+            console.log("Data Updated")
+        }).catch((error) => {
+            console.log(error);
+        });
+
+        //refresh & close pop-up
+        forceUpdate();
+        hideModal();
+    };
+
+    //render screen-------------------------------------------------------------------------
 
     return (
         <View style={styles.root}>
@@ -128,8 +193,42 @@ const PartsScreen = () => {
                     </View>
                 </Modal>
 
+                <Modal transparent={true} visible={showEditModal}>
+                    <View style={styles.modalbg}>
+                        <View style={styles.modal}>
+                            <View style={styles.modal_titleContainer}>
+                                <Text style={styles.modal_title}>Edit {editingPartName}</Text>
+                            </View>
 
-                <PartsFetch/>
+                            <CustomInput placeholder={editingPartName} value={part} setValue={setPart} multiline={true}/>
+                            <CustomInput placeholder={editingPartBrand} value={brand} setValue={setBrand} multiline={true}/>
+                            <CustomInput placeholder={editingPartDescription} value={description} setValue={setDescription} size='big' multiline={true}/>
+                            
+                            <View>
+                                <CustomButton text="Submit" onPress={editPartData} type='primary'/>
+                                <CustomButton text="Discard" onPress={hideModal} type='secondary'/>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
+
+                <ScrollView>
+                    {partsList.map((part) => {
+                        return(
+                            <CustomCard 
+                                Title="Part" 
+                                TitleValue={part.part_name} 
+                                Var1="Brand" 
+                                Var1Value={part.part_brand} 
+                                Var2="Description" 
+                                Var2Value={part.part_description}
+                                EditAction={() => setEditPart(part.id, part.part_name, part.part_brand, part.part_description)}
+                                DeleteAction={() => deletePart(part.id)}
+                            />
+                        )
+                    })}
+                </ScrollView>
 
 
             </View>
