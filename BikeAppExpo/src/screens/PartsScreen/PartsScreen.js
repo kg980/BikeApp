@@ -69,17 +69,33 @@ const PartsScreen = () => {
     //FIRESTORE IMPLEMENTATION:
 
     //FETCH DB DATA one-time
-    
+    {/*
     useEffect(() => {
         
         const getPartsList = async () => { 
         //this is an async function. Bad practise to make the useEffect async. create a function inside the useEffect instead, then call the functions.
             const partData = await getDocs(partsCollectionRef); //await  handles the promise
             setPartsList(partData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+            console.log(partsList);
         };
         getPartsList();
     }, [refreshMe])
-    
+    */}
+
+    //{/*
+    useEffect(() => {
+        
+        const getPartsList = async () => { 
+        //this is an async function. Bad practise to make the useEffect async. create a function inside the useEffect instead, then call the functions.
+            const partData = await getDocs(partsCollectionRef); //await  handles the promise
+            setPartsList(partData.docs
+                .filter((doc) => doc.part_userid == user.id)
+                .map((doc) => ({ ...doc.data(), id: doc.id })));
+            console.log(partsList);
+        };
+        getPartsList();
+    }, [refreshMe])
+    //*/}
     
     //REALTIME FETCH DATA
     {/*
@@ -91,16 +107,17 @@ const PartsScreen = () => {
             orderBy('part_timestamp', 'asc')
         ); 
         //temp user.id: sdJhKPRlqwZLvQdrtcVm9Dgemn93
-            
+        
         setLoading(true);
 
         const unsub = onSnapshot(q, (querySnapshot) => { //querySnapshot is a list of items returned by the query
-            const items = [];
+            const items = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
             //setPartsList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-            querySnapshot.forEach((doc) => {
-                console.log(doc.data());
-                //items.push(doc.data());
-            });
+
+            // querySnapshot.forEach((doc) => {
+            //     console.log(doc.data());
+            //     //items.push(doc.data());
+            // });
             setPartsList(items);
             setLoading(false);
         });
@@ -109,6 +126,42 @@ const PartsScreen = () => {
             unsub();
         };
     }, [refreshMe]);
+    */}
+
+    {/*
+    useEffect(() => {
+        const getPartsList = async () => { 
+            const items = []
+
+            const queryData = query(
+                partsCollectionRef, 
+                where('part_userid', '==', authentication.currentUser.id)
+            );
+
+            const querySnapshot = await getDocs(queryData)
+            .then(docRef => {
+                console.log("querySnapshot Docs aquired")
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+
+            items = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+            .then(docRef => {
+                console.log("querySnapshot Docs aquired")
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+            setPartsList(items);
+
+        };
+
+        getPartsList();
+
+    }, [refreshMe])
     */}
    
 
