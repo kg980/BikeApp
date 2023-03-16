@@ -9,7 +9,7 @@ import CustomFooter from "../../components/CustomFooter";
 import PartsCard from "../../components/PartsCard";
 import CustomCard from "../../components/CustomCard";
 import { authentication, db, dbTimeStamp } from "../../../firebase";
-import { collection, getDocs, doc, setDoc, addDoc, deleteDoc } from 'firebase/firestore/lite';
+import { collection, getDocs, doc, setDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
 //import 'react-native-get-random-values';
 //import { v4 as uuidv4 } from 'uuid';
 import PartsFetch from "./PartsFetch";
@@ -126,29 +126,41 @@ const PartsScreen = () => {
     };
     //UPDATE DOC IN THE DB
     const editPartData = async () => {
-        const PartValue = part;
-        const BrandValue = brand;
-        const DescriptionValue = description;
-        const creationTimeStamp = dbTimeStamp.now();
-    
-        //replace doc with the given ID in DB:
-        if(PartValue !== null){
-            //setDoc
-        }
-        else{
-            //ignore
+        const updateTimeStamp = dbTimeStamp.now();
+        //const TimestampValue = {part_timestamp: updateTimeStamp};
+        const PartValue = {part_name: part, part_timestamp: updateTimeStamp};
+        const BrandValue = {part_brand: brand, part_timestamp: updateTimeStamp};
+        const DescriptionValue = {part_description: description, part_timestamp: updateTimeStamp};
+
+        docRef = doc(db, 'BikeParts', editingPartId);
+        
+        //Conditionally update data depending on which field(s) has been filled in/edited in the edit modal pop up.
+        if(part !== null){
+            updateDoc(docRef, PartValue)
+            .then(docRef => {
+                console.log("Part Name Updated")
+            }).catch((error) => {
+                console.log(error);
+            });
         }
 
-        await setDoc(collection(db, "BikeParts", editingPartId), {
-            part_name: PartValue,
-            part_brand: BrandValue,
-            part_description: DescriptionValue,
-            part_timestamp: creationTimeStamp,
-        }).then(() => {
-            console.log("Data Updated")
-        }).catch((error) => {
-            console.log(error);
-        });
+        if(brand !== null){
+            updateDoc(docRef, BrandValue)
+            .then(docRef => {
+                console.log("Part Brand Updated")
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+
+        if(description !== null){
+            updateDoc(docRef, DescriptionValue)
+            .then(docRef => {
+                console.log("Part Description Updated")
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
 
         //refresh & close pop-up
         forceUpdate();
@@ -225,6 +237,7 @@ const PartsScreen = () => {
                                 Var2Value={part.part_description}
                                 EditAction={() => setEditPart(part.id, part.part_name, part.part_brand, part.part_description)}
                                 DeleteAction={() => deletePart(part.id)}
+                                key={part.id}
                             />
                         )
                     })}
