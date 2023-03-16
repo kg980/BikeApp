@@ -10,6 +10,7 @@ import PartsCard from "../../components/PartsCard";
 import CustomCard from "../../components/CustomCard";
 import { authentication, db, dbTimeStamp } from "../../../firebase";
 import { collection, getDocs, doc, setDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
+import { onSnapshot, query, where, orderBy, QuerySnapshot } from 'firebase/firestore';
 //import 'react-native-get-random-values';
 //import { v4 as uuidv4 } from 'uuid';
 import PartsFetch from "./PartsFetch";
@@ -20,9 +21,8 @@ const PartsScreen = () => {
     const[part, setPart] = useState('');  //read input from the app
     const[description, setDescription] =  useState(''); //read input from the app
     const[brand, setBrand] =  useState(''); //read input from the app
-    const[showModal, setShowModal] = useState('false');
+    const[showModal, setShowModal] = useState(false);
     const [partsList, setPartsList] = useState([]);
-    const partsCollectionRef = collection(db, 'BikeParts');
     const [refreshMe, forceUpdate] = useReducer(x => x + 1, 0); //increment every time forceUpdate() is called
     //emulates forceUpdate, as react re-renders whenever there is a state change (in this case, the state of 'refreshMe' will change as it increments). 
     //DB change does not count as a state change from the app's perspective, and once useEffect runs to fetch data (at the start), it doesnt run again.
@@ -30,12 +30,13 @@ const PartsScreen = () => {
     //force a re-render and show updated db info on the UI
     const [editingPartName, setEditingPartName] = useState('');
     const [editingPartId, setEditingPartId] = useState('');
-    const[showEditModal, setShowEditModal] = useState('false');
+    const[showEditModal, setShowEditModal] = useState(false);
     const [editingPartBrand, setEditingPartBrand] = useState('');
     const [editingPartDescription, setEditingPartDescription] = useState('');
+    const [loading, setLoading] = useState(false);
 
-
-
+    //firebase stuff
+    const partsCollectionRef = collection(db, 'BikeParts');
     const user = authentication.currentUser;
 
     const addButtonClicked = () => {
@@ -67,17 +68,49 @@ const PartsScreen = () => {
 
     //FIRESTORE IMPLEMENTATION:
 
-    //FETCH DB DATA
+    //FETCH DB DATA one-time
+    
     useEffect(() => {
         
         const getPartsList = async () => { 
-        //this is an async function. Bad practise to make the useEffect async. 
-        //create a function inside the useEffect instead, then call the functions.
+        //this is an async function. Bad practise to make the useEffect async. create a function inside the useEffect instead, then call the functions.
             const partData = await getDocs(partsCollectionRef); //await  handles the promise
             setPartsList(partData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
         };
         getPartsList();
     }, [refreshMe])
+    
+    
+    //REALTIME FETCH DATA
+    {/*
+    useEffect(() => {
+        //const partsCollectionRef = collection(db, 'BikeParts'); //this is already defined, pasted it here for easy reference.
+        const q = query(
+            partsCollectionRef, 
+            //where('part_userid', '==', 'sdJhKPRlqwZLvQdrtcVm9Dgemn93')
+            orderBy('part_timestamp', 'asc')
+        ); 
+        //temp user.id: sdJhKPRlqwZLvQdrtcVm9Dgemn93
+            
+        setLoading(true);
+
+        const unsub = onSnapshot(q, (querySnapshot) => { //querySnapshot is a list of items returned by the query
+            const items = [];
+            //setPartsList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+            querySnapshot.forEach((doc) => {
+                console.log(doc.data());
+                //items.push(doc.data());
+            });
+            setPartsList(items);
+            setLoading(false);
+        });
+
+        return () => {
+            unsub();
+        };
+    }, [refreshMe]);
+    */}
+   
 
     //ADD A DOC
     const createPartData = async () => {
@@ -91,7 +124,7 @@ const PartsScreen = () => {
     
         //create doc in DB
         await addDoc(collection(db, "BikeParts"), { //addDoc = auto-generates an ID. SetDoc = must specify an ID yourself. overwrites docs with same ID.
-            part_Id: user.uid, //in the future, can make this correspond to a particular bicycle ID instead, so that you can display parts corresponding to each bike.
+            part_userid: user.uid, //in the future, can make this correspond to a particular bicycle ID instead, so that you can display parts corresponding to each bike.
             part_name: PartValue,                                                       //the bicycle Id can then correspond to the user ID to link it all to the user.
             part_brand: BrandValue,
             part_description: DescriptionValue,

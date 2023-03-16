@@ -73,12 +73,12 @@ const HomeScreen = () => {
                 </View>
                 <View style={styles.buttonsBox}>
                     <View style={styles.buttonsCol}>
-                        <CustomButton text="My Bikes" style={styles.navButton} type="secondary" onPress={myBikesPressed}/>
-                        <CustomButton text="Maintenance Checklist" style={styles.navButton} type="secondary" onPress={maintListPressed}/>
+                        <CustomButton text="My Bikes" type="nav" onPress={myBikesPressed}/>
+                        <CustomButton text="Maintenance Checklist" type="nav" onPress={maintListPressed}/>
                     </View>
                     <View style={styles.buttonsCol}>
-                        <CustomButton text="Journeys" style={styles.navButton} type="secondary" onPress={journeysPressed}/>
-                        <CustomButton text="               Forum               " style={styles.navButton} type="secondary" onPress={forumPressed}/>
+                        <CustomButton text="Journeys" type="nav" onPress={journeysPressed}/>
+                        <CustomButton text="Forum" type="nav" onPress={forumPressed}/>
 
                     </View>
                 </View>
@@ -130,7 +130,8 @@ const styles = StyleSheet.create({
     buttonsBox: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'stretch',
+        //alignItems: 'stretch',
+        alignItems: 'center',
         justifyContent: 'space-around',
         backgroundColor: 'white',
         height: '40%',
@@ -139,20 +140,11 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
-        justifyContent: 'space-around',
+        //justifyContent: 'space-around',
+        justifyContent: 'center',
+        //justifyContent: 'space-between',
         //backgroundColor: 'yellow',
-        padding: '1%',
-    },
-    navButton: {
-        alignItems: 'center',
-        margin: '15%',
-        padding: '5%',
-        paddingHorizontal: '50%',
-        backgroundColor: '#EDEDED',
-        borderColor: '#EDEDED',
-        borderWidth: 1,
-        borderRadius: 15,
-        height: '45%',
+        //padding: '1%',
     },
     pumpIt: {
         backgroundColor: '#FF8001',
