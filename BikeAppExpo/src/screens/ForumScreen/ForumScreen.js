@@ -14,16 +14,24 @@ import { onSnapshot, query, where, orderBy, QuerySnapshot, FirestoreError } from
 import { async } from "@firebase/util";
 //screen for distance tracker and navigation buttons
 
+
+import CustomCard from "../../components/CustomCard";
+
 const ForumScreen = () => {
 
     const forumPostsCollection = collection(db, 'ForumPosts');
+    const partsCollectionRef = collection(db, 'BikeParts');
+
     const user = authentication.currentUser;
 
     const[showModal, setShowModal] = useState('true');
     const [refreshMe, forceUpdate] = useReducer(x => x + 1, 0);
     const[title, setTitle] = useState('');
     const[body, setBody] = useState('');
+    
+
     const [postsList, setPostsList] = useState([]);
+    const [partsList, setPartsList] = useState([]);
 
     //Fetch data
 
@@ -89,15 +97,24 @@ const ForumScreen = () => {
 
     // useEffect(()  => {getForumPosts();}, [])
 
-    useEffect(() => {
-        const getPostsList = async () => {
-            const postData = await getDocs(forumPostsCollection);
-            setPostsList(postData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-            console.log(postsList);
-        };
-        getPostsList();
-        
+    // useEffect(() => {
+    //     const getPostsList = async () => {
+    //         const postData = await getDocs(forumPostsCollection);
+    //         setPostsList(postData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    //         console.log(postsList);
+    //     };
+    //     getPostsList();
+    // }, [refreshMe])
 
+
+    useEffect(() => {
+        const getPartsList = async () => { 
+            const postData = await getDocs(forumPostsCollection);
+            setPartsList(postData.docs
+                .map((doc) => ({ ...doc.data(), id: doc.id }))); 
+            console.log(partsList);
+        };
+        getPartsList();
     }, [refreshMe])
 
 
@@ -193,6 +210,22 @@ const ForumScreen = () => {
                         )
                     })}   
                 </ScrollView> */}
+
+                <ScrollView>
+                    {partsList.map((post) => {
+                        const postdate = new Date(post.post_timestamp.seconds*1000)
+                        return(
+                            <ForumCard 
+                                Title={post.post_title} 
+                                Body={post.post_body} 
+                                Username={post.post_username} 
+                                //Timestamp="15:30"
+                                //Timestamp={post.post_timestamp.toString()}
+                                Timestamp={postdate.toString()}
+                            />
+                        )
+                    })}    
+                </ScrollView>
 
             </View>
             <CustomFooter isGo='false'/>
