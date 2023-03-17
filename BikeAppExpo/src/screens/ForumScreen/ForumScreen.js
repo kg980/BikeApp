@@ -17,14 +17,19 @@ import { async } from "@firebase/util";
 const ForumScreen = () => {
 
     const forumPostsCollection = collection(db, 'ForumPosts');
-    const partsCollectionRef = collection(db, 'BikeParts');
 
     const user = authentication.currentUser;
 
     const[showModal, setShowModal] = useState('true');
+    const[showEditModal, setShowEditModal] = useState(false);
+
     const [refreshMe, forceUpdate] = useReducer(x => x + 1, 0);
     const[title, setTitle] = useState('');
     const[body, setBody] = useState('');
+
+    const [editingPostTitle, setEditingPostTitle] = useState('');
+    const [editingPostId, setEditingPostId] = useState('');
+    const [editingPostBody, setEditingPostBody] = useState('');
     
 
     const [postsList, setPostsList] = useState([]);
@@ -120,6 +125,17 @@ const ForumScreen = () => {
         setShowModal(true);
     };
 
+    //hide both modals
+    const hideModal = () => {
+        //console.warn("hideModal");
+        setShowModal(false);
+        setShowEditModal(false);
+
+        //clear inputs:
+        setTitle(null)
+        setBody(null)
+    };
+
     //ADD A DOC
     const createPostData = async () => {
         const creationTimeStamp = dbTimeStamp.now();
@@ -151,20 +167,41 @@ const ForumScreen = () => {
         forceUpdate();
     };
     
+    //EDIT A POST DOC
+    //set states first:
+    const setEditPost = async (id, title, body)  => {
+        setEditingPostTitle(title);
+        setEditingPostId(id);
+        setEditingPostBody(body);
+        setShowEditModal(true);
+    };
+
+    //update DB values if user submits form:
+    const editPostData = async () => {
+        const updateTimeStamp = dbTimeStamp.now();
+        docRef = doc(db, 'ForumPosts', editingPostId);
+
+        updateDoc(docRef, {
+            post_title: title, 
+            post_body: body, 
+            post_timestamp: updateTimeStamp
+        })
+        .then((docRef) => {
+            console.log("Post Title Updated")
+        }).catch((error) => {
+            console.log(error);
+        });
+
+        //refresh & close pop-up
+        forceUpdate();
+        hideModal();
+    };   
 
     const searchButtonClicked = () => {
         console.warn("Search Clicked");
     };
 
-    const hideModal = () => {
-        //console.warn("hideModal");
-        //hide the add part pop up modal:
-        setShowModal(false);
-
-        //clear inputs:
-        setTitle(null)
-        setBody(null)
-    };
+    
 
     return (
         <View style={styles.root}>
@@ -191,10 +228,26 @@ const ForumScreen = () => {
                     </View>
                 </View>
             </Modal>
+
+            <Modal transparent={true} visible={showEditModal}>
+                    <View style={styles.modalbg}>
+                        <View style={styles.modal}>
+                            <View style={styles.modal_titleContainer}>
+                                <Text style={styles.modal_title}>Edit Post</Text>
+                            </View>
+
+                            <CustomInput placeholder={editingPostTitle} value={title} setValue={setTitle} multiline={true}/>
+                            <CustomInput placeholder={editingPostBody} value={body} setValue={setBody} size='big' multiline={true}/>
+                            
+                            <View>
+                                <CustomButton text="Submit" onPress={editPostData} type='primary'/>
+                                <CustomButton text="Discard" onPress={hideModal} type='secondary'/>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
                 
             <View style={styles.content}>
-            
-
                 <ScrollView>
                     {postsList.map((post) => {
                         const postdate = new Date(post.post_timestamp.seconds*1000)
@@ -208,6 +261,7 @@ const ForumScreen = () => {
                                 Timestamp={datestring} //go up to 20th  .split(" ")[0]
                                 postId={post.id}
                                 DeleteAction={() => deletePost(post.id)}
+                                EditAction={() => setEditPost(post.id, post.post_title, post.post_body)}
                             />
                         )
                     })}    

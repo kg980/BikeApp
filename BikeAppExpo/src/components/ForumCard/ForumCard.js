@@ -30,9 +30,9 @@ const ForumCard = ({Title, Body, Username, Timestamp, EditAction, DeleteAction, 
                     </View>
                     
                     <View style={styles.iconButtons}>
-                        <TouchableOpacity><Image source={EditIcon} resizeMode="contain" style={styles.icons} onPress={EditAction}/></TouchableOpacity>
-                        <TouchableOpacity><Image source={DeleteIcon} resizeMode="contain" style={styles.icons} onPress={DeleteAction}/></TouchableOpacity>
-                        <TouchableOpacity><Image source={ReplyIcon} resizeMode="contain" style={styles.icons} onPress={ReplyAction}/></TouchableOpacity>
+                        <TouchableOpacity onPress={EditAction}><Image source={EditIcon} resizeMode="contain" style={styles.icons}/></TouchableOpacity>
+                        <TouchableOpacity onPress={DeleteAction}><Image source={DeleteIcon} resizeMode="contain" style={styles.icons}/></TouchableOpacity>
+                        <TouchableOpacity onPress={ReplyAction}><Image source={ReplyIcon} resizeMode="contain" style={styles.icons}/></TouchableOpacity>
                     </View>
                     
                     <TouchableOpacity>

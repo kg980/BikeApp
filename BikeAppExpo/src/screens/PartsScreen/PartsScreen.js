@@ -233,6 +233,7 @@ const PartsScreen = () => {
         setEditingPartDescription(Description);
         setShowEditModal(true);
     };
+    
     //UPDATE DOC IN THE DB
     const editPartData = async () => {
         const updateTimeStamp = dbTimeStamp.now();
