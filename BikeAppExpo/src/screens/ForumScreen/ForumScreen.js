@@ -14,9 +14,6 @@ import { onSnapshot, query, where, orderBy, QuerySnapshot, FirestoreError } from
 import { async } from "@firebase/util";
 //screen for distance tracker and navigation buttons
 
-
-import CustomCard from "../../components/CustomCard";
-
 const ForumScreen = () => {
 
     const forumPostsCollection = collection(db, 'ForumPosts');

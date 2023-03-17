@@ -15,8 +15,8 @@ const ForumCard = ({Title, Body, Username, Timestamp, EditAction, DeleteAction, 
                 <View style={styles.titleContainer}>
                     <Text multiline={true} style={styles.titleText}>{Title}</Text>
                     <View>
-                        <Text style={styles.titleText}>{Username}</Text>
-                        <Text style={styles.titleText}>{Timestamp}</Text>
+                        <Text style={styles.usernameText}>posted by: {Username}</Text>
+                        
                     </View>
                     
                 </View>
@@ -25,6 +25,7 @@ const ForumCard = ({Title, Body, Username, Timestamp, EditAction, DeleteAction, 
             {showContent && ( //if showContent = true, then display the following:
                 <View style={styles.bodyContainer}>
                     <View style={styles.bodyInput}>
+                        <Text style={styles.timestampText}>{Timestamp}</Text>
                         <Text style={styles.bodyText}>{Body} </Text>
                     </View>
                     
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
     },
     titleArrow: {
@@ -80,7 +81,13 @@ const styles = StyleSheet.create({
     },
     titleText: {
         padding: '1%',
-        fontSize: 16,
+        fontSize: 18,
+        textDecorationLine: 'underline',
+    },
+    usernameText: {
+        padding: '1%',
+        fontSize: 14,
+        color: 'grey',
     },
     bodyContainer: {
         borderColor: '#EDEDED',
@@ -96,6 +103,11 @@ const styles = StyleSheet.create({
     },
     bodyText: {
         padding: '2%',
+        fontSize: 18,
+    },
+    timestampText: {
+        fontSize: 12,
+        color: 'grey',
     },
     iconButtons: {
         display: 'flex',
