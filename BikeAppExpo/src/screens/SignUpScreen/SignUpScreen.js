@@ -27,6 +27,9 @@ const SignUpScreen = () => {
             createUserWithEmailAndPassword(authentication,username,password)
             .then((re) => {
                 console.log(re); //get result and log it
+                // return re.user.updateProfile({
+                //     displayName: document.getElementById("name").value
+                // })
             })
             .catch((re) => {
                 console.log(re);

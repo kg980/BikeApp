@@ -1,5 +1,5 @@
-import React , {useState} from "react";
-import { View, Text, Image, StyleSheet, useWindowDimensions, TouchableOpacity, ScrollView, Modal} from 'react-native';
+import React , {useEffect, useReducer, useState} from "react";
+import { View, Text, Image, StyleSheet, useWindowDimensions, TouchableOpacity, ScrollView, Modal, FlatList} from 'react-native';
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
@@ -7,14 +7,98 @@ import ForumCard from "../../components/ForumCard";
 import SearchIcon from "../../../assets/images/SearchIcon.png";
 //import CustomModal from "../../components/CustomModal";
 import CustomInput from "../../components/CustomInput";
-
+//firebase imports
+import { authentication, db, dbTimeStamp } from "../../../firebase";
+import { collection, getDocs, doc, setDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
+import { onSnapshot, query, where, orderBy, QuerySnapshot, FirestoreError } from 'firebase/firestore';
+import { async } from "@firebase/util";
 //screen for distance tracker and navigation buttons
 
 const ForumScreen = () => {
 
+    const forumPostsCollection = collection(db, 'ForumPosts');
+    const user = authentication.currentUser;
+
     const[showModal, setShowModal] = useState('true');
+    const [refreshMe, forceUpdate] = useReducer(x => x + 1, 0);
     const[title, setTitle] = useState('');
     const[body, setBody] = useState('');
+    const [postsList, setPostsList] = useState([]);
+
+    //Fetch data
+
+    // useEffect(() => {
+        
+    //     const getPostsList = async () => { 
+    //     //this is an async function. Bad practise to make the useEffect async. create a function inside the useEffect instead, then call the functions.
+    //         const postData = await getDocs(forumPostsCollection); //await  handles the promise
+    //         setPostsList(postData.docs
+    //             .map((doc) => ({ ...doc.data(), id: doc.id }))); //gives an array of doc OBJECTS
+    //         console.log(postsList);
+    //     };
+    //     getPostsList();
+    //     // return () => {
+    //     //     getPostsList();
+    //     // };
+        
+    // }, [refreshMe])
+
+    
+
+    // const fetchdata = async() => {
+    //     onSnapshot(forumPostsCollection, (querySnapshot) => {
+    //         const posts = []
+    //         querySnapshot.forEach((doc) => 
+    //         {
+    //             const { 
+    //                 post_username, 
+    //                 post_userid, 
+    //                 post_timestamp, 
+    //                 post_title, 
+    //                 post_body 
+    //             } = doc.data()
+
+    //             posts.push({
+    //                 id: doc.id,
+    //                 post_username, 
+    //                 post_userid, 
+    //                 post_timestamp, 
+    //                 post_title, 
+    //                 post_body
+    //             })
+    //         })
+    //         setPostsList(posts)
+    //     })
+    // };
+    
+    // useEffect( () => {fetchdata(); }, [])
+
+    // const getForumPosts = async() => {
+    //     forumPosts = await getDocs(forumPostsCollection)
+    //     .then((snapshot) => {
+    //         let posts = []
+    //         snapshot.docs.forEach((doc) => {
+    //             posts.push({ ...doc.data(), id: doc.id })
+    //         })
+    //         console.log(posts)
+    //     })
+    //     .catch(err => {
+    //         console.log(err.message)
+    //     })
+    // };
+
+    // useEffect(()  => {getForumPosts();}, [])
+
+    useEffect(() => {
+        const getPostsList = async () => {
+            const postData = await getDocs(forumPostsCollection);
+            setPostsList(postData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+            console.log(postsList);
+        };
+        getPostsList();
+        
+
+    }, [refreshMe])
 
 
 
@@ -23,12 +107,32 @@ const ForumScreen = () => {
         setShowModal(true);
     };
 
+    //ADD A DOC
+    const createPostData = async () => {
+        const creationTimeStamp = dbTimeStamp.now();
+        const displayName = user.email.split("@")[0]
+    
+        //create doc in DB
+        await addDoc(forumPostsCollection, {
+            post_username: displayName,
+            post_userid: user.uid,
+            post_timestamp: creationTimeStamp,
+            post_title: title,
+            post_body: body,
+        }).then(() => {
+            console.log("Post submitted")
+        }).catch((error) => {
+            console.log(error);
+        });
+
+        //refresh & close pop-up
+        forceUpdate();
+        hideModal();
+    };
+    
+
     const searchButtonClicked = () => {
         console.warn("Search Clicked");
-    };
-
-    const submitModal = () => {
-        console.warn("submitModal");
     };
 
     const hideModal = () => {
@@ -40,10 +144,6 @@ const ForumScreen = () => {
         setTitle(null)
         setBody(null)
     };
-
-    let Distance;
-    let Time;
-
 
     return (
         <View style={styles.root}>
@@ -64,7 +164,7 @@ const ForumScreen = () => {
                         <CustomInput placeholder='Body' value={body} setValue={setBody} size='big' multiline={true}/>
                             
                         <View>
-                            <CustomButton text="Submit" onPress={submitModal} type='primary'/>
+                            <CustomButton text="Submit" onPress={createPostData} type='primary'/>
                             <CustomButton text="Discard" onPress={hideModal} type='secondary'/>
                         </View>
                     </View>
@@ -72,13 +172,28 @@ const ForumScreen = () => {
             </Modal>
                 
             <View style={styles.content}>
-                <ScrollView>
-                    <ForumCard Title="Title" Body="Hello world!"/>
-                    <ForumCard Title="Help my tyre is flat" Body="Do i need a whole new tyre or just an inner tube? I cant see any marks"/>
-                    <ForumCard Title="which type of brakes does this bike need?" Body="My brakes broke and im not sure which type im supposed to buy"/>
-                    <ForumCard Title="what tools do you need to tighten a chain?" Body="The chain keeps slipping off the gears"/>
+            
+                {/* <ScrollView>
+                    <ForumCard Title="Title" Body="Hello world!" Username="Kinga" Timestamp="15:30"/>
+                    <ForumCard Title="Help my tyre is flat" Body="Do i need a whole new tyre or just an inner tube? I cant see any marks" Username="Kinga" Timestamp="15:30"/>
+                    <ForumCard Title="which type of brakes does this bike need?" Body="My brakes broke and im not sure which type im supposed to buy" Username="Kinga" Timestamp="15:30"/>
+                    <ForumCard Title="what tools do you need to tighten a chain?" Body="The chain keeps slipping off the gears" Username="Kinga" Timestamp="15:30"/>
                     
-                </ScrollView>
+                </ScrollView> */}
+
+                {/* <ScrollView> 
+                    {postsList.map((post) => {
+                        return(
+                            <ForumCard 
+                                Title={post.post_title} 
+                                Body={post.post_body}
+                                Username={post.post_username}
+                                Timestamp={post.post_timestamp}
+                            />
+                        )
+                    })}   
+                </ScrollView> */}
+
             </View>
             <CustomFooter isGo='false'/>
         </View>
@@ -111,32 +226,6 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         flexDirection: 'column',
         flex: 5,
-    },
-    ridebox: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        height: '75%',
-        alignItems: 'center',
-        //marginBottom: 'auto',
-        backgroundColor: '#EDEDED',
-        borderColor: '#EDEDED',
-        borderWidth: 1,
-        borderRadius: 15,
-        marginTop: 0,
-    },
-    statsContainer: {
-        //backgroundColor: '#F9F9F9',
-        padding: '2%',
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: '#F9F9F9',
-        padding: '5%',
-    },
-    statsText: {
-        fontSize: 22,
-        alignSelf: 'center',
-        fontWeight: 'bold',
     },
     bannerIcons: {
         height: 30,

@@ -10,7 +10,7 @@ import PartsCard from "../../components/PartsCard";
 import CustomCard from "../../components/CustomCard";
 import { authentication, db, dbTimeStamp } from "../../../firebase";
 import { collection, getDocs, doc, setDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
-import { onSnapshot, query, where, orderBy, QuerySnapshot } from 'firebase/firestore';
+import { onSnapshot, query, where, orderBy, QuerySnapshot, FirestoreError } from 'firebase/firestore';
 //import 'react-native-get-random-values';
 //import { v4 as uuidv4 } from 'uuid';
 import PartsFetch from "./PartsFetch";
@@ -90,14 +90,38 @@ const PartsScreen = () => {
             const partData = await getDocs(partsCollectionRef); //await  handles the promise
             setPartsList(partData.docs
                 .filter((doc) => doc.part_userid == user.id)
-                .map((doc) => ({ ...doc.data(), id: doc.id })));
+                .map((doc) => ({ ...doc.data(), id: doc.id }))); //gives an array of doc OBJECTS
             console.log(partsList);
         };
         getPartsList();
     }, [refreshMe])
     //*/}
-    
+
     //REALTIME FETCH DATA
+    {/*
+    useEffect(() => {
+        const queryData = query(
+                partsCollectionRef, 
+                where('part_userid', '==', 'sdJhKPRlqwZLvQdrtcVm9Dgemn93')
+            );
+            
+        const getPartsList = onSnapshot(queryData, (snapshot) => {
+            let items = []
+            snapshot.docs.forEach((doc) => {
+                items.push({ ...doc.data(), id: doc.id })
+            });
+            console.log(items);
+            setPartsList(items);
+        });
+        getPartsList();
+
+        return () => {
+            getPartsList();
+        };
+
+    }, [refreshMe])
+    */}
+
     {/*
     useEffect(() => {
         //const partsCollectionRef = collection(db, 'BikeParts'); //this is already defined, pasted it here for easy reference.
@@ -309,7 +333,6 @@ const PartsScreen = () => {
                     </View>
                 </Modal>
 
-
                 <ScrollView>
                     {partsList.map((part) => {
                         return(
@@ -325,9 +348,8 @@ const PartsScreen = () => {
                                 key={part.id}
                             />
                         )
-                    })}
+                    })}    
                 </ScrollView>
-
 
             </View>
             <CustomFooter isGo='false'/>

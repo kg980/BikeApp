@@ -5,7 +5,7 @@ import DeleteIcon from "../../../assets/images/DeleteIcon.png";
 import ReplyIcon from "../../../assets/images/ReplyIcon.png";
 import CustomButton from "../CustomButton";
 
-const ForumCard = ({Title, Body, EditAction, DeleteAction, ReplyAction}) => {
+const ForumCard = ({Title, Body, Username, Timestamp, EditAction, DeleteAction, ReplyAction, postId}) => {
     const [showContent, setShowContent] = useState(false);
     const [showComments, setShowComments] = useState(false);
 
@@ -13,8 +13,12 @@ const ForumCard = ({Title, Body, EditAction, DeleteAction, ReplyAction}) => {
         <View style={styles.root}>
             <TouchableOpacity onPress={() => setShowContent(!showContent)}>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>{Title}</Text>
-                    <Text style={styles.titleArrow}>></Text>
+                    <Text multiline={true} style={styles.titleText}>{Title}</Text>
+                    <View>
+                        <Text style={styles.titleText}>{Username}</Text>
+                        <Text style={styles.titleText}>{Timestamp}</Text>
+                    </View>
+                    
                 </View>
             </TouchableOpacity>
             
