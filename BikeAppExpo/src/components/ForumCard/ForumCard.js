@@ -5,7 +5,7 @@ import DeleteIcon from "../../../assets/images/DeleteIcon.png";
 import ReplyIcon from "../../../assets/images/ReplyIcon.png";
 import CustomButton from "../CustomButton";
 
-const ForumCard = ({Title, Body, Username, Timestamp, EditAction, DeleteAction, ReplyAction, postId}) => {
+const ForumCard = ({Title, Body, Username, Timestamp, EditAction, DeleteAction, ReplyAction, postId, userId}) => {
     const [showContent, setShowContent] = useState(false);
     const [showComments, setShowComments] = useState(false);
 

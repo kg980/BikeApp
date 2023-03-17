@@ -28,7 +28,6 @@ const ForumScreen = () => {
     
 
     const [postsList, setPostsList] = useState([]);
-    const [partsList, setPartsList] = useState([]);
 
     //Fetch data
 
@@ -105,13 +104,13 @@ const ForumScreen = () => {
 
 
     useEffect(() => {
-        const getPartsList = async () => { 
+        const getPostsList = async () => { 
             const postData = await getDocs(forumPostsCollection);
-            setPartsList(postData.docs
+            setPostsList(postData.docs
                 .map((doc) => ({ ...doc.data(), id: doc.id }))); 
-            console.log(partsList);
+            console.log(postsList);
         };
-        getPartsList();
+        getPostsList();
     }, [refreshMe])
 
 
@@ -142,6 +141,14 @@ const ForumScreen = () => {
         //refresh & close pop-up
         forceUpdate();
         hideModal();
+    };
+
+    //DELETE A DOC
+    const deletePost = async (id) => {
+        console.warn("Deleting");
+        const postDoc = doc(db, "ForumPosts", id);
+        await deleteDoc(postDoc);
+        forceUpdate();
     };
     
 
@@ -187,38 +194,20 @@ const ForumScreen = () => {
                 
             <View style={styles.content}>
             
-                {/* <ScrollView>
-                    <ForumCard Title="Title" Body="Hello world!" Username="Kinga" Timestamp="15:30"/>
-                    <ForumCard Title="Help my tyre is flat" Body="Do i need a whole new tyre or just an inner tube? I cant see any marks" Username="Kinga" Timestamp="15:30"/>
-                    <ForumCard Title="which type of brakes does this bike need?" Body="My brakes broke and im not sure which type im supposed to buy" Username="Kinga" Timestamp="15:30"/>
-                    <ForumCard Title="what tools do you need to tighten a chain?" Body="The chain keeps slipping off the gears" Username="Kinga" Timestamp="15:30"/>
-                    
-                </ScrollView> */}
-
-                {/* <ScrollView> 
-                    {postsList.map((post) => {
-                        return(
-                            <ForumCard 
-                                Title={post.post_title} 
-                                Body={post.post_body}
-                                Username={post.post_username}
-                                Timestamp={post.post_timestamp}
-                            />
-                        )
-                    })}   
-                </ScrollView> */}
 
                 <ScrollView>
-                    {partsList.map((post) => {
+                    {postsList.map((post) => {
                         const postdate = new Date(post.post_timestamp.seconds*1000)
+                        const datestringarr = postdate.toString().split(" ")
+                        const datestring = datestringarr[4] + ' ' + datestringarr[2] + ' ' + datestringarr[1] + ' ' + datestringarr[3]
                         return(
                             <ForumCard 
                                 Title={post.post_title} 
                                 Body={post.post_body} 
-                                Username={post.post_username} 
-                                //Timestamp="15:30"
-                                //Timestamp={post.post_timestamp.toString()}
-                                Timestamp={postdate.toString()}
+                                Username={post.post_username}
+                                Timestamp={datestring} //go up to 20th  .split(" ")[0]
+                                postId={post.id}
+                                DeleteAction={() => deletePost(post.id)}
                             />
                         )
                     })}    
