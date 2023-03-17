@@ -1,6 +1,7 @@
 import React , {useEffect, useState} from "react";
 import { View, Text, Image, StyleSheet, useWindowDimensions, KeyboardAvoidingView, ScrollView} from 'react-native';
 import LoginLogo from "../../../assets/images/LoginLogo.png";
+import PumpItLogo from "../../../assets/images/PumpItLogo.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
@@ -50,10 +51,13 @@ const LoginScreen = () => {
         //authenticate
         console.warn("Forgot Password doesnt work yet :)");
     };
-
+    
+    //<Image source={LoginLogo} style={[styles.logo, {height: height *  0.5}]} resizeMode="contain"/>
+    //add logo writing
+    
     return (
         <View style={styles.root}>
-            <Image source={LoginLogo} style={[styles.logo, {height: height *  0.5}]} resizeMode="contain"/>
+            <Image source={PumpItLogo} style={[styles.logo, {height: height *  0.25}]} resizeMode="contain"/>
 
             <KeyboardAvoidingView behavior="height">
                 <CustomInput placeholder="Username" value={username} setValue={setUsername}/>
@@ -69,7 +73,9 @@ const LoginScreen = () => {
 
 const styles = StyleSheet.create({
     root: {
-        //alignItems: 'center',
+        display: 'flex',
+        alignItems: 'stretch',
+        justifyContent: 'center',
         padding: 20,
         backgroundColor: 'white',
         height: '100%',

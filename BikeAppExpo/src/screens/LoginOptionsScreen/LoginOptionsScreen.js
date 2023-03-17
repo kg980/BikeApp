@@ -16,13 +16,11 @@ const LoginOptionsScreen = () => {
     
 
     const logInPressed = () => {
-        console.warn("Logged in");
         //nav to loginscreen
         navigation.navigate('LoginScreen');
     };
     const signUpPressed = () => {
-        console.warn("Sign Up");
-
+        //console.warn("Sign Up");
         navigation.navigate('SignUpScreen');
     };
 
