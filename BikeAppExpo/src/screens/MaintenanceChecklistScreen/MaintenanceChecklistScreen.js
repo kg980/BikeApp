@@ -38,24 +38,24 @@ const MaintenanceChecklistScreen = () => {
                 <View style={styles.content}>
                     {/*MANDATORY TASKS*/}
                     <ChecklistCard
-                        Task="Tyre Pressure"
-                        Info="IHJGOIRESHGSFDLIGHVNEIGHWEWIOGVNESLKGJHNITUHNGLTHGVJRIWNJHVTWRHVINVIWNVW"
+                        Task="Tire Pressure"
+                        Info="Check the side of your bicycle tyre for pressure requirements. Record this in the Bicycle Profile for the future!"
                     />
                     <ChecklistCard
-                        Task="Tyre Pressure"
-                        Info="IHJGOIRESHGSFDLIGHVNEIGHWEWIOGVNESLKGJHNITUHNGLTHGVJRIWNJHVTWRHVINVIWNVW"
+                        Task="Front brake"
+                        Info="Ensure that the brake smoothly stops the wheel. This should not be too sudden nor too slow"
                     />
                     <ChecklistCard
-                        Task="Tyre Pressure"
-                        Info="IHJGOIRESHGSFDLIGHVNEIGHWEWIOGVNESLKGJHNITUHNGLTHGVJRIWNJHVTWRHVINVIWNVW"
+                        Task="Back brake"
+                        Info="Ensure that the brake smoothly stops the wheel. This should not be too sudden nor too slow"
                     />
                     <ChecklistCard
-                        Task="Tyre Pressure"
-                        Info="IHJGOIRESHGSFDLIGHVNEIGHWEWIOGVNESLKGJHNITUHNGLTHGVJRIWNJHVTWRHVINVIWNVW"
+                        Task="Lights"
+                        Info="Check the angle, stability and battery life."
                     />
                     <ChecklistCard
-                        Task="Tyre Pressure"
-                        Info="IHJGOIRESHGSFDLIGHVNEIGHWEWIOGVNESLKGJHNITUHNGLTHGVJRIWNJHVTWRHVINVIWNVW"
+                        Task="Seat Height"
+                        Info="Ensure that the seat is tightened to prevent it from gradually getting lower during your ride."
                     />
 
                     {/*user-made CUSTOM TASKS*/}

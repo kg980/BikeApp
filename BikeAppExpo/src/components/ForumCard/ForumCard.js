@@ -45,12 +45,10 @@ const ForumCard = ({Title, Body, Username, Timestamp, EditAction, DeleteAction, 
                     {showComments && (
                         <View>
                             <View style={styles.bodyInput}>
-                                <Text>Reply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply 
-                            testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply test</Text>
+                                <Text>It depends on the area you live in, could you describe what the roads are like in your area? I've always used LiteBike.</Text>
                             </View>
                             <View style={styles.bodyInput}>
-                                <Text>Reply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply 
-                            testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply testReply test</Text>
+                                <Text>My area doesnt really have potholes so I just get random ones from Wilko.. So it depends but you can try them</Text>
                             </View>
                         </View>
                     )}

@@ -262,6 +262,7 @@ const ForumScreen = () => {
                                 postId={post.id}
                                 DeleteAction={() => deletePost(post.id)}
                                 EditAction={() => setEditPost(post.id, post.post_title, post.post_body)}
+                                key={post.id}
                             />
                         )
                     })}    

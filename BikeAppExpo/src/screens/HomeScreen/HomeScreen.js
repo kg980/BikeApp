@@ -1,4 +1,4 @@
-import React , {useState} from "react";
+import React , {useState, useEffect, useReducer} from "react";
 import { View, Text, Image, StyleSheet, useWindowDimensions, TouchableOpacity} from 'react-native';
 import Bicycle from "../../../assets/images/Bicycle.png";
 import BicycleRed from "../../../assets/images/BicycleRed.png";
@@ -9,14 +9,41 @@ import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
 import { useNavigation } from "@react-navigation/native";
 //import { auth } from "../../../firebase";
-import { authentication } from "../../../firebase";
 import { signOut } from "firebase/auth";
+import { authentication, db, dbTimeStamp } from "../../../firebase";
+import { collection, getDocs, doc, setDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
+import { getDoc, query, where } from "firebase/firestore";
+
 
 //screen for distance tracker and navigation buttons
 
 const HomeScreen = () => {
+
+    const userStatsCollectionRef = collection(db, 'UserStats');
+    const user = authentication.currentUser;
+    const[userRepairDist, setUserRepairDist] = useState('');
+    const[userDataList, setUserDataList] = useState([]);
+    const [refreshMe, forceUpdate] = useReducer(x => x + 1, 0);
+
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigation = useNavigation();
+
+    //fetch user data
+    useEffect(() => {
+        const getUserDataList = async () => { 
+        //this is an async function. Bad practise to make the useEffect async. create a function inside the useEffect instead, then call the functions.
+            //const q = await query(userStatsCollectionRef, where("user_id", "==", "sdJhKPRlqwZLvQdrtcVm9Dgemn93"));
+            const usersStatsData = await getDocs(userStatsCollectionRef); //await  handles the promise
+            setUserDataList(usersStatsData.docs
+                .filter((doc) => doc.user_id == user.id)
+                .map((doc) => ({ ...doc.data(), id: doc.id }))); //gives an array of doc OBJECTS
+            console.log(userDataList);
+        };
+        getUserDataList();
+    }, [refreshMe])
+
+
+
     const myBikesPressed = () => {
         //
         navigation.navigate("PartsScreen");
@@ -56,6 +83,8 @@ const HomeScreen = () => {
     };
     
 
+
+
     return (
         <View style={styles.root}>
             <CustomBanner 
@@ -67,10 +96,24 @@ const HomeScreen = () => {
             <View style={styles.content}>
                 <View style={styles.distance}>
                     <Image source={Bicycle} resizeMode="contain"/>
-                    <Text style={styles.distanceText}>/4000km</Text>
+                    <View>
+                    
+                    {
+                        userDataList
+                        .filter((item) => item.user_id == 'sdJhKPRlqwZLvQdrtcVm9Dgemn93')
+                        .map((userData) => {
+                            return(
+                                <Text key={userData.id} style={styles.distanceText}>{userData.user_repair_distance}/4000km</Text>
+                            )
+                        })
+                    
+                    }
+                        
+                    </View>
                     <Text style={styles.meter}></Text>
                     <TouchableOpacity onPress={pumpIt} style={styles.pumpIt}><Text style={styles.pumpItText}>PumpIt!</Text></TouchableOpacity>
                 </View>
+
                 <View style={styles.buttonsBox}>
                     <View style={styles.buttonsCol}>
                         <CustomButton text="My Bikes" type="nav" onPress={myBikesPressed}/>

@@ -1,10 +1,13 @@
-import React , {useState} from "react";
+import React , {useState, useReducer, useEffect} from "react";
 import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView, Modal} from 'react-native';
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
 import CustomCard from "../../components/CustomCard";
+import { authentication, db, dbTimeStamp } from "../../../firebase";
+import { collection, getDocs, doc, setDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
+import { getDoc } from "firebase/firestore";
 
 //screen for distance tracker and navigation buttons
 
@@ -13,15 +16,91 @@ const JourneyHistoryScreen = () => {
     const[showModal, setShowModal] = useState('false');
     const[distance, setDistance] = useState('');
     const[time, setTime] = useState('');
+    const [journeysList, setJourneysList] = useState([]);
+    const [refreshMe, forceUpdate] = useReducer(x => x + 1, 0);
+
+    const journeysCollectionRef = collection(db, 'Journeys');
+    const user = authentication.currentUser;
+
+    const userStatsCollectionRef = collection(db, 'UserStats');
+
+    //Fetch DB data
+    useEffect(() => {
+        
+        const getJourneysList = async () => { 
+        //this is an async function. Bad practise to make the useEffect async. create a function inside the useEffect instead, then call the functions.
+            const journeysData = await getDocs(journeysCollectionRef); //await  handles the promise
+            setJourneysList(journeysData.docs
+                .filter((doc) => doc.journey_userid == user.id)
+                .map((doc) => ({ ...doc.data(), id: doc.id }))); //gives an array of doc OBJECTS
+            console.log(journeysList);
+        };
+        getJourneysList();
+    }, [refreshMe])
+
 
     const addButtonClicked = () => {
         //console.warn("Add Bike Clicked");
         setShowModal(true);
     };
 
-    const submitModal = () => {
-        console.warn("submitModal");
+    //add doc to DB
+    const submitModal = async () => {
+        const distanceValue = distance;
+        const timeValue = time;
+        const creationTimeStamp = dbTimeStamp.now();
+    
+        //create doc in DB
+        await addDoc(journeysCollectionRef, { //addDoc = auto-generates an ID. SetDoc = must specify an ID yourself. overwrites docs with same ID.
+            journey_userid: user.uid, //in the future, can make this correspond to a particular bicycle ID instead, so that you can display parts corresponding to each bike.
+            journey_distance: distanceValue,                                                       //the bicycle Id can then correspond to the user ID to link it all to the user.
+            journey_time: timeValue,
+            journey_date: creationTimeStamp,
+        }).then(() => {
+            console.log("Journey Data submitted")
+            //add the distanceValue to the UserStats collection repair distance value.
+            addRepairDistance(distanceValue);
+        }).catch((error) => {
+            console.log(error);
+        });
+
+        //refresh & close pop-up
+        forceUpdate();
+        hideModal();
     };
+
+    const addRepairDistance = async (addDistance) => {
+        //fetch the user's userStats (userStatsCollectionRef)
+        const docRef = doc(db, 'UserStats', 'SHjSXllFLUfNF8scEtrK'); //need to update this later so we fetch based on user id
+
+        try{
+            const docSnap = await getDoc(docRef);
+            if(docSnap.exists()){
+                console.log("LOOK HEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
+                console.log(docSnap.data());
+            }
+        } catch(error) {
+            console.log(error)
+        }
+
+    };
+
+    //delete doc
+    const deleteJourney = async (id) => {
+        //update the repair distance.
+        //subtract the deleted value from the current userStats repair distance
+        //if the new value is less than 0, set it to 0.
+
+        //delete doc from collection
+        const journeyDoc = doc(db, "Journeys", id);
+        await deleteDoc(journeyDoc);
+
+        //refresh to render updated DB on UI:
+        forceUpdate();
+    };
+
+    
+
 
     const hideModal = () => {
         //console.warn("hideModal");
@@ -54,8 +133,8 @@ const JourneyHistoryScreen = () => {
                                 <Text style={styles.modal_title}>Add a Journey</Text>
                             </View>
 
-                            <CustomInput placeholder='Distance' value={distance} setValue={setDistance} multiline={true}/>
-                            <CustomInput placeholder='Time (seconds)' value={time} setValue={setTime} multiline={true}/>
+                            <CustomInput placeholder='Distance (km)' value={distance} setValue={setDistance} multiline={true}/>
+                            <CustomInput placeholder='Time (minutes)' value={time} setValue={setTime} multiline={true}/>
                                 
                             <View style={styles.modalButtons}>
                                 <CustomButton text="Submit" onPress={submitModal} type='primary'/>
@@ -66,8 +145,29 @@ const JourneyHistoryScreen = () => {
                 </Modal>
 
                 <ScrollView style={styles.partsContainer}>
-                    <CustomCard Title="Date"  Var1="Distance (km)" Var2="Time (min/sec)"/>
+                    <CustomCard Title="Date"  Var1="Distance (km)" Var2="Time (minutes)"/>
+
+                    {journeysList.map((journey) => {
+                        const journeydate = new Date(journey.journey_date.seconds*1000)
+                        const datestringarr = journeydate.toString().split(" ")
+                        const datestring = datestringarr[2] + ' ' + datestringarr[1] + ' ' + datestringarr[3]
+                        return(
+                            <CustomCard  
+                                Title="Date" 
+                                TitleValue={datestring} 
+                                Var1="Distance (km)" 
+                                Var1Value={journey.journey_distance} 
+                                Var2="Time (minutes)" 
+                                Var2Value={journey.journey_time}
+                                key={journey.id}
+                                DeleteAction={() => deleteJourney(journey.id)}
+                            />
+                        )
+                    })}    
+
                 </ScrollView>
+                
+
             </View>
             <CustomFooter isGo='false'/>
         </View>
