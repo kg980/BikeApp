@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
 import { authentication, db, dbTimeStamp } from "../../../firebase";
 import { collection, getDocs, doc, setDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
-import { getDoc, query, where } from "firebase/firestore";
+import { getDoc, onSnapshot, query, where } from "firebase/firestore";
 
 
 //screen for distance tracker and navigation buttons
@@ -20,9 +20,13 @@ import { getDoc, query, where } from "firebase/firestore";
 const HomeScreen = () => {
 
     const userStatsCollectionRef = collection(db, 'UserStats');
+    const maintenanceCollectionRef = collection(db, 'MaintenanceHistory');
+
     const user = authentication.currentUser;
     const[userRepairDist, setUserRepairDist] = useState('');
+    const[userDataId, setUserDataId] = useState('');
     const[userDataList, setUserDataList] = useState([]);
+    const[currentUserStats, setCurrentUserStats] = useState([]);
     const [refreshMe, forceUpdate] = useReducer(x => x + 1, 0);
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,7 +41,7 @@ const HomeScreen = () => {
             setUserDataList(usersStatsData.docs
                 .filter((doc) => doc.user_id == user.id)
                 .map((doc) => ({ ...doc.data(), id: doc.id }))); //gives an array of doc OBJECTS
-            console.log(userDataList);
+            //console.log(userDataList);
         };
         getUserDataList();
     }, [refreshMe])
@@ -63,12 +67,65 @@ const HomeScreen = () => {
         //
         navigation.navigate("JourneyHistoryScreen");
     };
-    const pumpIt = () => {
-        //Reset distance in database / on screen
-        //reset logo to normal
-        //add record to maintenance history
-        console.warn("Reset Distance");
+
+    const pumpIt = async (id) => {
+        //alert(id);
+        //currentUserStats  => setCurrentUserStats([])
+        const repairDistance = 0;
+        const statsDocRef = doc(db, "UserStats", id);
+        console.log("statsDocRef: ", statsDocRef)
+
+        //retrieve and store the repair distance value in a variable, to be stored in the maintenance record
+        // docData = await getDoc(statsDocRef)
+        // .then((snapshot) => {
+        //     //console.log("snapshot data: ", snapshot.doc.data())
+        //     snapshot.docs.map(doc => doc.data())
+        // })
+        
+        // try{
+        //     const statsDocSnap = await getDoc(statsDocRef)
+        //         .then((snapshot) => {console.log("Doc Data: ", snapshot.data())});
+            
+        // } catch (e) {
+        //     console.log("Error getting document: ", e);
+        // }
+
+
+        
+        
+        //update the value of statsDoc.repair_distance to 0    
+        const NewValue = {user_repair_distance: 0};
+        updateDoc(statsDocRef, NewValue);
+        
+        //add a maintenance record to the DB
+        addMaintenanceRecord(repairDistance);
+        alert("Maintenance record added to your maintenance history.")
+
+        //refresh to render updated DB on UI:
+        forceUpdate();
     };
+
+    const addMaintenanceRecord = async (repairDistance) => {
+        const creationTimeStamp = dbTimeStamp.now();
+    
+        //create doc in DB
+        await addDoc(maintenanceCollectionRef, {
+            user_id: user.uid,
+            maintenance_date: creationTimeStamp,
+            maintenance_notes: "", //user can edit this themselves on the maintenance history screen to add notes.
+            maintenance_distance: repairDistance
+        }).then(() => {
+            console.log("Maintenance Record submitted")
+        }).catch((error) => {
+            console.log(error);
+        });
+
+        //refresh & close pop-up
+        forceUpdate();
+    };
+
+
+
     const logoutPressed = () => {
         //logout user
         signOut(authentication)
@@ -96,22 +153,26 @@ const HomeScreen = () => {
             <View style={styles.content}>
                 <View style={styles.distance}>
                     <Image source={Bicycle} resizeMode="contain"/>
-                    <View>
+                    
                     
                     {
                         userDataList
                         .filter((item) => item.user_id == 'sdJhKPRlqwZLvQdrtcVm9Dgemn93')
                         .map((userData) => {
+                            //setUserDataId(userData.id);  //this causes infinite loop  of re-renders. dont use setter here.
                             return(
-                                <Text key={userData.id} style={styles.distanceText}>{userData.user_repair_distance}/4000km</Text>
+                                <View style={styles.userStats}>
+                                    <Text key={userData.id} style={styles.distanceText}>{userData.user_repair_distance}/4000km</Text>
+                                    <Text style={styles.meter}></Text>
+                                    <TouchableOpacity onPress={() => pumpIt(userData.id)} style={styles.pumpIt}><Text style={styles.pumpItText}>PumpIt!</Text></TouchableOpacity>
+                                </View>
                             )
                         })
                     
                     }
                         
-                    </View>
-                    <Text style={styles.meter}></Text>
-                    <TouchableOpacity onPress={pumpIt} style={styles.pumpIt}><Text style={styles.pumpItText}>PumpIt!</Text></TouchableOpacity>
+                    
+                    
                 </View>
 
                 <View style={styles.buttonsBox}>
@@ -169,6 +230,16 @@ const styles = StyleSheet.create({
         borderColor: '#EDEDED',
         borderWidth: 1,
         borderRadius: 15,
+        //backgroundColor: 'yellow',
+    },
+    userStats: {
+        //backgroundColor: 'red',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        //height: '60%',
+        width: '100%',
+        alignItems: 'center',
     },
     buttonsBox: {
         display: 'flex',
@@ -216,7 +287,7 @@ const styles = StyleSheet.create({
     meter: {
         backgroundColor: 'white',
         width: '80%',
-        height: '15%',
+        height: '30%',
         borderWidth: 1,
         borderRadius: 15,
         borderColor: 'white',
