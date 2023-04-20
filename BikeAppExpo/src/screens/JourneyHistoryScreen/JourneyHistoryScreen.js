@@ -8,10 +8,13 @@ import CustomCard from "../../components/CustomCard";
 import { authentication, db, dbTimeStamp } from "../../../firebase";
 import { collection, getDocs, doc, setDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
 import { getDoc } from "firebase/firestore";
+import { useNavigation } from "@react-navigation/native";
 
 //screen for distance tracker and navigation buttons
 
 const JourneyHistoryScreen = () => {
+
+    const navigation = useNavigation();
 
     const[showModal, setShowModal] = useState('false');
     const[distance, setDistance] = useState('');
@@ -33,7 +36,7 @@ const JourneyHistoryScreen = () => {
             setJourneysList(journeysData.docs
                 .filter((doc) => doc.journey_userid == user.id)
                 .map((doc) => ({ ...doc.data(), id: doc.id }))); //gives an array of doc OBJECTS
-            console.log(journeysList);
+            //console.log(journeysList);
         };
         getJourneysList();
     }, [refreshMe])
@@ -42,6 +45,10 @@ const JourneyHistoryScreen = () => {
     const addButtonClicked = () => {
         //console.warn("Add Bike Clicked");
         setShowModal(true);
+    };
+
+    const homeButtonClicked = () => {
+        navigation.navigate("HomeScreen");
     };
 
     //add doc to DB
@@ -56,33 +63,36 @@ const JourneyHistoryScreen = () => {
             journey_distance: distanceValue,                                                       //the bicycle Id can then correspond to the user ID to link it all to the user.
             journey_time: timeValue,
             journey_date: creationTimeStamp,
-        }).then(() => {
+        }).then((doc) => {
             console.log("Journey Data submitted")
             //add the distanceValue to the UserStats collection repair distance value.
-            addRepairDistance(distanceValue);
+            //console.log("test alert: ", doc.id)
+            //console.log("test alert 2: ", doc)
+            addRepairDistance(distanceValue, 'SHjSXllFLUfNF8scEtrK');
         }).catch((error) => {
             console.log(error);
         });
+
 
         //refresh & close pop-up
         forceUpdate();
         hideModal();
     };
 
-    const addRepairDistance = async (addDistance) => {
+    const addRepairDistance = async (addDistance, id) => {
         //fetch the user's userStats (userStatsCollectionRef)
-        const docRef = doc(db, 'UserStats', 'SHjSXllFLUfNF8scEtrK'); //need to update this later so we fetch based on user id
+        const docRef = doc(db, 'UserStats', id); //need to update this later so we fetch based on user id
+        console.log("docRef: ", docRef)
 
-        try{
-            const docSnap = await getDoc(docRef);
-            if(docSnap.exists()){
-                console.log("LOOK HEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
-                console.log(docSnap.data());
-            }
-        } catch(error) {
-            console.log(error)
-        }
+        //update the value of statsDoc.repair_distance to 0  
+        //const newDistance = docRef.data().user_repair_distance + addDistance 
+        const NewValue = {user_repair_distance: addDistance};
+        updateDoc(docRef, NewValue);
+        
+        //logic to check whether we have exceeded 4km, 
+        //in which case the user should get a notification that they should do maintenance.
 
+        forceUpdate();
     };
 
     //delete doc
@@ -117,7 +127,7 @@ const JourneyHistoryScreen = () => {
         <View style={styles.root}>
             <CustomBanner 
                 text='Journeys' 
-                ButtonL={<CustomButton text='   ' type='icon'/>} 
+                ButtonL={<CustomButton text='☖' type='icon' onPress={homeButtonClicked}/>} 
                 ButtonR={<CustomButton text="+" type='icon' onPress={addButtonClicked}/>}
             
                 />
@@ -145,7 +155,7 @@ const JourneyHistoryScreen = () => {
                 </Modal>
 
                 <ScrollView style={styles.partsContainer}>
-                    <CustomCard Title="Date"  Var1="Distance (km)" Var2="Time (minutes)"/>
+                    {/*<CustomCard Title="Date"  Var1="Distance (km)" Var2="Time (minutes)"/>*/}
 
                     {journeysList.map((journey) => {
                         const journeydate = new Date(journey.journey_date.seconds*1000)

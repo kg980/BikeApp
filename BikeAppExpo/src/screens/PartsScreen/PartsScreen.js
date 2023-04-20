@@ -1,5 +1,5 @@
 import React , { useState, useReducer, useEffect } from "react";
-import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView, Modal} from 'react-native';
+import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView, Modal, Touchable, TouchableOpacity} from 'react-native';
 import Bicycle from "../../../assets/images/Bicycle.png";
 import BicycleRed from "../../../assets/images/BicycleRed.png";
 import CustomInput from "../../components/CustomInput";
@@ -14,10 +14,14 @@ import { onSnapshot, query, where, orderBy, QuerySnapshot, FirestoreError } from
 //import 'react-native-get-random-values';
 //import { v4 as uuidv4 } from 'uuid';
 import PartsFetch from "./PartsFetch";
+import { useNavigation } from "@react-navigation/native";
 
 //screen for distance tracker and navigation buttons
 
 const PartsScreen = () => {
+
+    const navigation = useNavigation();
+    
     const[part, setPart] = useState('');  //read input from the app
     const[description, setDescription] =  useState(''); //read input from the app
     const[brand, setBrand] =  useState(''); //read input from the app
@@ -45,8 +49,12 @@ const PartsScreen = () => {
         setShowModal(true);
     };
 
+    const maintenanceHistoryClicked = () => {
+        navigation.navigate("MaintenanceHistoryScreen");
+    };
+
     const changeBikeName = () => {
-        console.warn("bike name edit not implemented");
+        alert("Changing your bike name is not available in this prototype, but will be implemented in the final version.");
     };
 
     const hideModal = () => {
@@ -249,6 +257,7 @@ const PartsScreen = () => {
             updateDoc(docRef, PartValue)
             .then(docRef => {
                 console.log("Part Name Updated")
+                forceUpdate();
             }).catch((error) => {
                 console.log(error);
             });
@@ -258,6 +267,7 @@ const PartsScreen = () => {
             updateDoc(docRef, BrandValue)
             .then(docRef => {
                 console.log("Part Brand Updated")
+                forceUpdate();
             }).catch((error) => {
                 console.log(error);
             });
@@ -267,6 +277,7 @@ const PartsScreen = () => {
             updateDoc(docRef, DescriptionValue)
             .then(docRef => {
                 console.log("Part Description Updated")
+                forceUpdate();
             }).catch((error) => {
                 console.log(error);
             });
@@ -277,13 +288,17 @@ const PartsScreen = () => {
         hideModal();
     };
 
+    const homeButtonClicked = () => {
+        navigation.navigate("HomeScreen");
+    }
+
     //render screen-------------------------------------------------------------------------
 
     return (
         <View style={styles.root}>
             <CustomBanner 
                 text='My Bikes' 
-                ButtonL={<CustomButton text='   ' type='icon'/>} 
+                ButtonL={<CustomButton text='☖' type='icon' onPress={homeButtonClicked}/>} 
                 ButtonR={<CustomButton text="+" type='icon' onPress={addButtonClicked}/>}
                 />
 
@@ -292,8 +307,11 @@ const PartsScreen = () => {
                 
 
                 <View style={styles.bikes}>
-                    <Pressable onPress={changeBikeName}><Text style={styles.bikesText}>Bike1</Text></Pressable>
+                    <Pressable onPress={changeBikeName}><Text style={styles.bikesText}>Bike1 ✎</Text></Pressable>
                     <Image source={Bicycle} resizeMode="contain" style={styles.logo}/>
+                    <TouchableOpacity style={styles.maintenanceHistoryContainer} onPress={maintenanceHistoryClicked}>
+                        <Text style={styles.maintenanceHistoryText}>Maintenance History</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <Modal transparent={true} visible={showModal}>
@@ -389,7 +407,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
-        height: '35%',
+        height: '40%',
         alignItems: 'center',
         //marginBottom: 'auto',
         backgroundColor: '#EDEDED',
@@ -436,6 +454,23 @@ const styles = StyleSheet.create({
     modalbg: {
         backgroundColor: '#000000aa',
         height: '100%',
+    },
+    maintenanceHistoryText: {
+        fontSize: 18,
+        color: 'white',
+        //fontWeight: 'bold',
+    },
+    maintenanceHistoryContainer: {
+        backgroundColor: '#FF8001',
+        padding: '2%',
+        margin: '2%',
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: '#FF8001',
+        width: '60%',
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '3.5%',
     },
 });
 

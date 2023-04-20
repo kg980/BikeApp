@@ -7,7 +7,7 @@ import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 //import { auth } from "../../../firebase";
 import { signOut } from "firebase/auth";
 import { authentication, db, dbTimeStamp } from "../../../firebase";
@@ -46,7 +46,7 @@ const HomeScreen = () => {
         getUserDataList();
     }, [refreshMe])
 
-
+    
 
     const myBikesPressed = () => {
         //
@@ -72,7 +72,7 @@ const HomeScreen = () => {
         //alert(id);
         //currentUserStats  => setCurrentUserStats([])
         const repairDistance = 0;
-        const statsDocRef = doc(db, "UserStats", id);
+        const statsDocRef = doc(db, "UserStats", id); //returns document reference instance
         console.log("statsDocRef: ", statsDocRef)
 
         //retrieve and store the repair distance value in a variable, to be stored in the maintenance record
@@ -89,6 +89,18 @@ const HomeScreen = () => {
         // } catch (e) {
         //     console.log("Error getting document: ", e);
         // }
+
+        // await getDoc(statsDocRef)
+        // .then((doc) => {
+        //     console.log("Getting the doc")
+        //     //add the distanceValue to the UserStats collection repair distance value.
+        //     console.log("test alert 1: ", doc.id)
+        //     console.log("test alert 2: ", doc)
+        //     console.log("test alert 3: ", doc.data())
+        // }).catch((error) => {
+        //     console.log(error);
+        // });
+		
 
 
         
@@ -113,7 +125,8 @@ const HomeScreen = () => {
             user_id: user.uid,
             maintenance_date: creationTimeStamp,
             maintenance_notes: "", //user can edit this themselves on the maintenance history screen to add notes.
-            maintenance_distance: repairDistance
+            maintenance_distance: repairDistance,
+            maintenance_part: ""
         }).then(() => {
             console.log("Maintenance Record submitted")
         }).catch((error) => {
@@ -124,7 +137,9 @@ const HomeScreen = () => {
         forceUpdate();
     };
 
-
+    const tempRefresh = () => {
+        forceUpdate();
+    }
 
     const logoutPressed = () => {
         //logout user
@@ -152,7 +167,7 @@ const HomeScreen = () => {
                 />
             <View style={styles.content}>
                 <View style={styles.distance}>
-                    <Image source={Bicycle} resizeMode="contain"/>
+                    <TouchableOpacity onPress={tempRefresh}><Image source={Bicycle} resizeMode="contain"/></TouchableOpacity>
                     
                     
                     {
@@ -161,12 +176,13 @@ const HomeScreen = () => {
                         .map((userData) => {
                             //setUserDataId(userData.id);  //this causes infinite loop  of re-renders. dont use setter here.
                             return(
-                                <View style={styles.userStats}>
-                                    <Text key={userData.id} style={styles.distanceText}>{userData.user_repair_distance}/4000km</Text>
+                                <View key={userData.id} style={styles.userStats}>
+                                    <Text style={styles.distanceText}>{userData.user_repair_distance}/4000km</Text>
                                     <Text style={styles.meter}></Text>
                                     <TouchableOpacity onPress={() => pumpIt(userData.id)} style={styles.pumpIt}><Text style={styles.pumpItText}>PumpIt!</Text></TouchableOpacity>
                                 </View>
                             )
+                            //<Text style={styles.meter}></Text>
                         })
                     
                     }
