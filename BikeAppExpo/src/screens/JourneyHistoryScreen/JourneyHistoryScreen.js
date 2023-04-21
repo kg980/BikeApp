@@ -22,6 +22,12 @@ const JourneyHistoryScreen = () => {
     const [journeysList, setJourneysList] = useState([]);
     const [refreshMe, forceUpdate] = useReducer(x => x + 1, 0);
 
+    const[showEditModal, setShowEditModal] = useState(false);
+
+    const [editingJourneyId, setEditingJourneyId] = useState('');
+    const[editTime, setEditTime] = useState('');
+    const[editDistance, setEditDistance] = useState('');
+
     const journeysCollectionRef = collection(db, 'Journeys');
     const user = authentication.currentUser;
 
@@ -79,6 +85,47 @@ const JourneyHistoryScreen = () => {
         hideModal();
     };
 
+    const setEditJourney = async (id, journeyDistance, journeyTime)  => {
+        setShowEditModal(true);
+        
+        setEditingJourneyId(id);
+        setEditTime(journeyTime);
+        setEditDistance(journeyDistance);
+    };
+    
+
+    const updateJourneyData = async () => {
+        const JourneyDistance = {journey_distance: distance};
+        const JourneyTime = {journey_time: time};
+
+        const docRef = doc(db, 'Journeys', editingJourneyId);
+        
+        //Conditionally update data depending on which field(s) has been filled in/edited in the edit modal pop up.
+        if(distance !== null){
+            updateDoc(docRef, JourneyDistance)
+            .then(docRef => {
+                console.log("Journey distance updated")
+                forceUpdate();
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+
+        if(time !== null){
+            updateDoc(docRef, JourneyTime)
+            .then(docRef => {
+                console.log("Maintenance Notes Updated")
+                forceUpdate();
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+
+        //refresh & close pop-up
+        forceUpdate();
+        hideModal();
+    };
+
     const addRepairDistance = async (addDistance, id) => {
         //fetch the user's userStats (userStatsCollectionRef)
         const docRef = doc(db, 'UserStats', id); //need to update this later so we fetch based on user id
@@ -116,6 +163,7 @@ const JourneyHistoryScreen = () => {
         //console.warn("hideModal");
         //hide the add part pop up modal:
         setShowModal(false);
+        setShowEditModal(false);
 
         //clear inputs:
         setDistance(null)
@@ -154,6 +202,24 @@ const JourneyHistoryScreen = () => {
                     </View>
                 </Modal>
 
+                <Modal transparent={true} visible={showEditModal}>
+                    <View style={styles.modalbg}>
+                        <View style={styles.modal}>
+                            <View style={styles.modal_titleContainer}>
+                                <Text style={styles.modal_title}>Edit Maintenance Notes</Text>
+                            </View>
+
+                            <CustomInput placeholder={editDistance} value={distance} setValue={setDistance}/>
+                            <CustomInput placeholder={editTime} value={time} setValue={setTime}/>
+                            
+                            <View>
+                                <CustomButton text="Submit" onPress={updateJourneyData} type='primary'/>
+                                <CustomButton text="Discard" onPress={hideModal} type='secondary'/>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
                 <ScrollView style={styles.partsContainer}>
                     {/*<CustomCard Title="Date"  Var1="Distance (km)" Var2="Time (minutes)"/>*/}
 
@@ -170,6 +236,7 @@ const JourneyHistoryScreen = () => {
                                 Var2="Time (minutes)" 
                                 Var2Value={journey.journey_time}
                                 key={journey.id}
+                                EditAction={() => setEditJourney(journey.id, journey.journey_distance, journey.journey_time)}
                                 DeleteAction={() => deleteJourney(journey.id)}
                             />
                         )

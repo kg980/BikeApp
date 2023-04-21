@@ -19,7 +19,7 @@ const MaintenanceHistoryScreen = () => {
     const [maintenanceList, setMaintenanceList] = useState([]);
     const [refreshMe, forceUpdate] = useReducer(x => x + 1, 0);
 
-    const[showModal, setShowModal] = useState('false');
+    const[showModal, setShowModal] = useState(false);
     const[showEditModal, setShowEditModal] = useState(false);
 
     const [editingMaintenanceParts, setEditingMaintenanceParts] = useState('');
