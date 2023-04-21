@@ -192,7 +192,7 @@ const JourneyHistoryScreen = () => {
                             </View>
 
                             <CustomInput placeholder='Distance (km)' value={distance} setValue={setDistance} multiline={true}/>
-                            <CustomInput placeholder='Time (minutes)' value={time} setValue={setTime} multiline={true}/>
+                            <CustomInput placeholder='Time (hh:mm:ss)' value={time} setValue={setTime} multiline={true}/>
                                 
                             <View style={styles.modalButtons}>
                                 <CustomButton text="Submit" onPress={submitModal} type='primary'/>
@@ -233,7 +233,7 @@ const JourneyHistoryScreen = () => {
                                 TitleValue={datestring} 
                                 Var1="Distance (km)" 
                                 Var1Value={journey.journey_distance} 
-                                Var2="Time (minutes)" 
+                                Var2="Time (hh:mm:ss)" 
                                 Var2Value={journey.journey_time}
                                 key={journey.id}
                                 EditAction={() => setEditJourney(journey.id, journey.journey_distance, journey.journey_time)}

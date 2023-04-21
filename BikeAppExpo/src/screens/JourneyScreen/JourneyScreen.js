@@ -3,10 +3,17 @@ import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollVi
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
 import MapImage from "../../../assets/images/map.png";
+import { authentication, db, dbTimeStamp } from "../../../firebase";
+import { collection, getDocs, doc, setDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
+import { getDoc } from "firebase/firestore";
+import { useNavigation } from "@react-navigation/native";
 
 //screen for distance tracker and navigation buttons
 
 const JourneyScreen = () => {
+
+    const journeysCollectionRef = collection(db, 'Journeys');
+    const user = authentication.currentUser;
 
     const[distance, setDistance] = useState('0');
     const[time, setTime] = useState('0:00:00');
@@ -51,7 +58,31 @@ const JourneyScreen = () => {
     const stopPressed  = () => {
         setActive(!active)
         showStopModal(false);
+
+        //add journey entry to DB
+        addJourneyRecord();
     }
+
+    //add journey record to DB
+    const addJourneyRecord = async () => {
+        const creationTimeStamp = dbTimeStamp.now();
+        const journeyTime = `${hours}:${mins}:${secs}`
+    
+        //create doc in DB
+        await addDoc(journeysCollectionRef, {
+            journey_userid: user.uid,
+            journey_date: creationTimeStamp,
+            journey_distance: "",
+            journey_time: journeyTime,
+        }).then(() => {
+            console.log("Journey Record submitted")
+        }).catch((error) => {
+            console.log(error);
+        });
+
+        alert('Journey record saved.')
+    };
+
 
     return (
         <View style={styles.root}>
