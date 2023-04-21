@@ -23,7 +23,7 @@ const JourneyScreen = () => {
                 <View style={styles.ridebox}>
                     <Text>Map goes here</Text>
                 </View>
-                
+
                 <View style={styles.statsContainer}>
                     <Text style={styles.statsText}>Distance: {distance}</Text>
                 </View>
@@ -34,7 +34,7 @@ const JourneyScreen = () => {
             <CustomFooter isGo='true'/>
         </View>
     );
-};
+}; 
 
 const styles = StyleSheet.create({
     root: {
