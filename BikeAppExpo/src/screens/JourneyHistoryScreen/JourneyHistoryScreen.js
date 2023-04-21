@@ -156,7 +156,9 @@ const JourneyHistoryScreen = () => {
         forceUpdate();
     };
 
-    
+    const tempRefresh = () => {
+        forceUpdate();
+    }
 
 
     const hideModal = () => {
@@ -181,7 +183,7 @@ const JourneyHistoryScreen = () => {
                 />
             <View style={styles.content}>
                 <View style={styles.bikes}>
-                    <Pressable><Text style={styles.bikesText}>Bike1</Text></Pressable>
+                    <Pressable onPress={tempRefresh}><Text style={styles.bikesText}>Bike1</Text></Pressable>
                 </View>
 
                 <Modal transparent={true} visible={showModal}>
