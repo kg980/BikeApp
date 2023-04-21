@@ -10,7 +10,7 @@ const CustomFooter = ({isGo}) => {
     const goNavPressed = () => {
         //take to journey screen
         //on journey screen, there is a new button to actually start the journey.
-        console.warn("GO navigation Pressed");
+        //console.warn("GO navigation Pressed");
         navigation.navigate("JourneyScreen")
     };
 

@@ -6,12 +6,8 @@ import CustomFooter from "../../components/CustomFooter";
 //screen for distance tracker and navigation buttons
 
 const JourneyScreen = () => {
-    const addButtonClicked = () => {
-        console.warn("Add Bike Clicked");
-    };
-
-    let Distance;
-    let Time;
+    const[distance, setDistance] = useState('');
+    const[time, setTime] = useState('');
 
 
 
@@ -23,14 +19,16 @@ const JourneyScreen = () => {
                 //ButtonR={<CustomButton text="+" type='icon' onPress={addButtonClicked}/>}
                 />
             <View style={styles.content}>
+
                 <View style={styles.ridebox}>
+                    <Text>Map goes here</Text>
+                </View>
                 
+                <View style={styles.statsContainer}>
+                    <Text style={styles.statsText}>Distance: {distance}</Text>
                 </View>
                 <View style={styles.statsContainer}>
-                    <Text style={styles.statsText}>Distance: {Distance}</Text>
-                </View>
-                <View style={styles.statsContainer}>
-                    <Text style={styles.statsText}>Time: {Time}</Text>
+                    <Text style={styles.statsText}>Time: {time}</Text>
                 </View>
             </View>
             <CustomFooter isGo='true'/>
