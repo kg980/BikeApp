@@ -4,7 +4,7 @@ import CustomButton from "../CustomButton";
 import GoButton from "../../../assets/images/GoButton3.png";
 import { useNavigation } from "@react-navigation/native";
 
-const CustomFooter = ({isGo}) => {
+const CustomFooter = ({isGo, goStartPressedProp}) => {
     const navigation = useNavigation(); 
    
     const goNavPressed = () => {
@@ -24,7 +24,7 @@ const CustomFooter = ({isGo}) => {
     let footerButton;
     isGo=='true' ? (footerButton = 
     <View style={styles.root}>
-        <TouchableOpacity onPress={goStartPressed}>
+        <TouchableOpacity onPress={goStartPressedProp}>
         <Image source={GoButton} styles={styles.go} resizeMethod="scale"/>
         </TouchableOpacity>
     </View>) 

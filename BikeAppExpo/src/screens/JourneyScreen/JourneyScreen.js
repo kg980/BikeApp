@@ -1,5 +1,5 @@
-import React , {useState} from "react";
-import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView} from 'react-native';
+import React , {useState, useEffect} from "react";
+import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView, Modal, TouchableOpacity} from 'react-native';
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
 import MapImage from "../../../assets/images/map.png";
@@ -7,11 +7,51 @@ import MapImage from "../../../assets/images/map.png";
 //screen for distance tracker and navigation buttons
 
 const JourneyScreen = () => {
-    const[distance, setDistance] = useState('');
-    const[time, setTime] = useState('');
+
+    const[distance, setDistance] = useState('0');
+    const[time, setTime] = useState('0:00:00');
     const {height} = useWindowDimensions();
+    const[stopModal, showStopModal] = useState(false);
+    const[remainingSecs, setRemainingSecs] = useState(0);
+    const[active, setActive] = useState(false);
+    
+    const formatNumber = number => `0${number}`.slice(-2);
+    const getRemaining = (time) => {
+        const mins = Math.floor(time / 60);
+        const hours = mins / 60
+        const secs = time - mins * 60;
+        return {hours: formatNumber(hours), mins: formatNumber(mins), secs: formatNumber(secs)};
+    };
+
+    const { hours, mins, secs } = getRemaining(remainingSecs);
+
+    const toggle = () => {
+        setActive(!active);
+    }
+
+    useEffect(() => {
+        let interval = null
+        if(active) {
+            interval = setInterval(() => {
+                setRemainingSecs(remainingSecs => remainingSecs + 1);
+            }, 1000)
+        } else if(!active && remainingSecs !== 0){
+            clearInterval(interval)
+        }
+        return () => clearInterval(interval);
+    }, [active, remainingSecs])
 
 
+
+    const goStartPressed  = () => {
+        setActive(!active);
+        showStopModal(true);
+    }
+
+    const stopPressed  = () => {
+        setActive(!active)
+        showStopModal(false);
+    }
 
     return (
         <View style={styles.root}>
@@ -27,13 +67,22 @@ const JourneyScreen = () => {
                 <Image source={MapImage} style={[styles.ridebox, {width: height *  0.49}]}/>
 
                 <View style={styles.statsContainer}>
-                    <Text style={styles.statsText}>Distance: {distance}</Text>
+                    <Text style={styles.statsText}>Distance: {distance} (km)</Text>
                 </View>
                 <View style={styles.statsContainer}>
-                    <Text style={styles.statsText}>Time: {time}</Text>
+                    <Text style={styles.statsText}>Time: {`${hours}:${mins}:${secs}`}</Text>
                 </View>
             </View>
-            <CustomFooter isGo='true'/>
+
+            <Modal transparent={true} visible={stopModal}>
+                <View style={styles.modal}>
+                    <TouchableOpacity style={styles.stopButton} onPress={stopPressed}>
+                        <Text style={styles.stopButtonText}>☐</Text>
+                    </TouchableOpacity>
+                </View>    
+            </Modal>
+
+            <CustomFooter isGo='true' goStartPressedProp={goStartPressed}/>
         </View>
     );
 }; 
@@ -91,6 +140,32 @@ const styles = StyleSheet.create({
     statsText: {
         fontSize: 22,
         alignSelf: 'center',
+        fontWeight: 'bold',
+    },
+    modal: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: 'rgba(52, 52, 52, 0)',
+        justifyContent: 'flex-end',
+        width: '100%',
+        height: '100%'
+    },
+    stopButton: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'red',
+        height:  67,
+        width: 67,
+        borderWidth: 5,
+        borderRadius: 50,
+        borderColor: 'red',
+        margin: 7,
+    },
+    stopButtonText: {
+        fontSize: 32,
+        color: 'white',
         fontWeight: 'bold',
     },
 });
