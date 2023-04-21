@@ -2,12 +2,14 @@ import React , {useState} from "react";
 import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable, ScrollView} from 'react-native';
 import CustomBanner from "../../components/CustomBanner";
 import CustomFooter from "../../components/CustomFooter";
+import MapImage from "../../../assets/images/map.png";
 
 //screen for distance tracker and navigation buttons
 
 const JourneyScreen = () => {
     const[distance, setDistance] = useState('');
     const[time, setTime] = useState('');
+    const {height} = useWindowDimensions();
 
 
 
@@ -20,9 +22,9 @@ const JourneyScreen = () => {
                 />
             <View style={styles.content}>
 
-                <View style={styles.ridebox}>
-                    <Text>Map goes here</Text>
-                </View>
+                {/*<View style={styles.ridebox}></View>*/}
+
+                <Image source={MapImage} style={[styles.ridebox, {width: height *  0.49}]}/>
 
                 <View style={styles.statsContainer}>
                     <Text style={styles.statsText}>Distance: {distance}</Text>
@@ -69,11 +71,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         height: '75%',
         alignItems: 'center',
+        alignSelf: 'center',
         //marginBottom: 'auto',
         backgroundColor: '#EDEDED',
         borderColor: '#EDEDED',
         borderWidth: 1,
         borderRadius: 15,
+        margin: 4,
         marginTop: 0,
     },
     statsContainer: {
