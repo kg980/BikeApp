@@ -58,8 +58,28 @@ const MaintenanceHistoryScreen = () => {
         setNotes(null)
     };
 
-    const submitModal = () => {
+    const submitModal = async () => {
         //add DB entry
+        const partsValue = parts;
+        const notesValue = notes;
+        const creationTimeStamp = dbTimeStamp.now();
+    
+        //create doc in DB
+        await addDoc(maintenanceCollectionRef, { 
+            user_id: user.uid, 
+            maintenance_part: partsValue,                                                    
+            maintenance_notes: notesValue,
+            maintenance_date: creationTimeStamp,
+        }).then((doc) => {
+            console.log("Maintenance Data submitted")
+        }).catch((error) => {
+            console.log(error);
+        });
+
+
+        //refresh & close pop-up
+        forceUpdate();
+        hideModal();
     };
 
     const setEditMaintenance = async (id, maintenanceParts, maintenanceNotes)  => {

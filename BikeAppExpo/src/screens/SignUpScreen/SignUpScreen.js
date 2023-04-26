@@ -46,7 +46,7 @@ const SignUpScreen = () => {
     
     const backToLoginPressed = () => {
         //authenticate
-        console.warn("Back To Login");
+        //console.warn("Back To Login");
         navigation.navigate("LoginOptionsScreen")
     };
 

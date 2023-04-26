@@ -38,7 +38,7 @@ const PartsFetch =  () => {
     };
 
     const editPart = () => {
-        console.warn("edit Entry");
+        //console.warn("edit Entry");
     };
 
 
