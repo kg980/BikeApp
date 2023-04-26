@@ -25,7 +25,7 @@ const SignUpScreen = () => {
     
     const createUserStats = async (userid) => {
         //add DB entry if the user account has been successfully created.
-        await addDoc(statsCollectionRef, { 
+        await setDoc(doc(statsCollectionRef, userid), { 
             user_id: userid, 
             user_repair_distance: 0,                                                    
             user_total_distance: 0,

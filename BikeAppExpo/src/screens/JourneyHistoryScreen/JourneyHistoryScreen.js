@@ -71,10 +71,8 @@ const JourneyHistoryScreen = () => {
             journey_date: creationTimeStamp,
         }).then((doc) => {
             console.log("Journey Data submitted")
-            //add the distanceValue to the UserStats collection repair distance value.
-            //console.log("test alert: ", doc.id)
-            //console.log("test alert 2: ", doc)
-            addRepairDistance(distanceValue, 'SHjSXllFLUfNF8scEtrK');
+            addRepairDistance(distanceValue, user.uid);
+            //console.log("LOOK2: ", user.uid)
         }).catch((error) => {
             console.log(error);
         });
@@ -131,6 +129,15 @@ const JourneyHistoryScreen = () => {
         const docRef = doc(db, 'UserStats', id); //need to update this later so we fetch based on user id
         console.log("docRef: ", docRef)
 
+        // const ExistingValue = 0;
+        // const docSnap = await getDoc(docRef)
+        // console.log("docSnap: ", docSnap)
+        // if(docSnap.exists()){
+        //     console.log("Document Data: ". docSnap.data());
+        // } else {
+        //     console.log("docSnap doesnt exist")
+        // }
+
         //update the value of statsDoc.repair_distance to 0  
         //const newDistance = docRef.data().user_repair_distance + addDistance 
         const NewValue = {user_repair_distance: addDistance};
@@ -140,6 +147,7 @@ const JourneyHistoryScreen = () => {
         //in which case the user should get a notification that they should do maintenance.
 
         forceUpdate();
+
     };
 
     //delete doc
