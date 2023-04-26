@@ -25,7 +25,7 @@ const JourneyScreen = () => {
     const formatNumber = number => `0${number}`.slice(-2);
     const getRemaining = (time) => {
         const mins = Math.floor(time / 60);
-        const hours = mins / 60
+        const hours = Math.floor(time / 3600);
         const secs = time - mins * 60;
         return {hours: formatNumber(hours), mins: formatNumber(mins), secs: formatNumber(secs)};
     };

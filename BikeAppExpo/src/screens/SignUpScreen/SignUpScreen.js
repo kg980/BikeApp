@@ -24,7 +24,7 @@ const SignUpScreen = () => {
     //const user = authentication.currentUser;
     
     const createUserStats = async (userid) => {
-        //add DB entry
+        //add DB entry if the user account has been successfully created.
         await addDoc(statsCollectionRef, { 
             user_id: userid, 
             user_repair_distance: 0,                                                    
@@ -39,26 +39,19 @@ const SignUpScreen = () => {
     const signUpPressed = () => {
         //authenticate
         if (confirmPassword === password){
-
             createUserWithEmailAndPassword(authentication,username,password)
             .then((re) => {
                 console.log("CREATE ACCOUNT OUTPUT: ", re); //get result and log it
-                console.log("ACCOUNT ID: ", re.user.uid);
                 createUserStats(re.user.uid);
             })
             .catch((re) => {
                 console.log(re);
             })
-
-            
-
             //navigate to login screen
             navigation.navigate("LoginScreen")
-
         } else {
             Alert.alert("Passwords do not match.")
         }
-
     };
     
     const backToLoginPressed = () => {
