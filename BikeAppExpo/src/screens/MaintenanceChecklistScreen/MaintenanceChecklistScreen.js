@@ -39,23 +39,23 @@ const MaintenanceChecklistScreen = () => {
                     {/*MANDATORY TASKS*/}
                     <ChecklistCard
                         Task="Tire Pressure"
-                        Info="Check the side of your bicycle tyre for pressure requirements. Record this in the Bicycle Profile for the future!"
+                        Info="Check the side of your bicycle tyre for its PSI value. Pump your tyre until your pump reads the appropriate value."
                     />
                     <ChecklistCard
                         Task="Front brake"
-                        Info="Ensure that the brake smoothly stops the wheel. This should not be too sudden nor too slow"
+                        Info="Walk your bicycle while applying your front brake and ensure it stops smoothly within 3 paces."
                     />
                     <ChecklistCard
                         Task="Back brake"
-                        Info="Ensure that the brake smoothly stops the wheel. This should not be too sudden nor too slow"
+                        Info="Walk your bicycle while applying your rear brake and ensure it stops smoothly within 3 paces."
                     />
                     <ChecklistCard
                         Task="Lights"
-                        Info="Check the angle, stability and battery life."
+                        Info="Ensure your lights have enough battery life, and that it is firmly attached."
                     />
                     <ChecklistCard
                         Task="Seat Height"
-                        Info="Ensure that the seat is tightened to prevent it from gradually getting lower during your ride."
+                        Info="Ensure that the seat is tightened at the correct height. Press firmly on the seat to ensure it will not fall under your weight"
                     />
 
                     {/*user-made CUSTOM TASKS*/}
