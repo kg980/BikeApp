@@ -6,8 +6,10 @@ import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 //import { auth } from "../../../firebase";
-import { authentication } from "../../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { authentication, db, dbTimeStamp } from "../../../firebase";
+import { collection, getDocs, doc, setDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
+import { getDoc } from "firebase/firestore";
 
 //screen which allows you to enter your login details and log in.
 
@@ -18,7 +20,21 @@ const SignUpScreen = () => {
     const navigation = useNavigation();
     const {height} = useWindowDimensions();
 
-
+    const statsCollectionRef = collection(db, 'UserStats');
+    //const user = authentication.currentUser;
+    
+    const createUserStats = async (userid) => {
+        //add DB entry
+        await addDoc(statsCollectionRef, { 
+            user_id: userid, 
+            user_repair_distance: 0,                                                    
+            user_total_distance: 0,
+        }).then((doc) => {
+            console.log("User Stats Data created")
+        }).catch((error) => {
+            console.log(error);
+        });
+    };
 
     const signUpPressed = () => {
         //authenticate
@@ -26,14 +42,15 @@ const SignUpScreen = () => {
 
             createUserWithEmailAndPassword(authentication,username,password)
             .then((re) => {
-                console.log(re); //get result and log it
-                // return re.user.updateProfile({
-                //     displayName: document.getElementById("name").value
-                // })
+                console.log("CREATE ACCOUNT OUTPUT: ", re); //get result and log it
+                console.log("ACCOUNT ID: ", re.user.uid);
+                createUserStats(re.user.uid);
             })
             .catch((re) => {
                 console.log(re);
             })
+
+            
 
             //navigate to login screen
             navigation.navigate("LoginScreen")
