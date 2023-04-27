@@ -4,10 +4,30 @@ import EditIcon from "../../../assets/images/EditIcon.png";
 import DeleteIcon from "../../../assets/images/DeleteIcon.png";
 import ReplyIcon from "../../../assets/images/ReplyIcon.png";
 import CustomButton from "../CustomButton";
+import { authentication, db, dbTimeStamp } from "../../../firebase";
 
 const ForumCard = ({Title, Body, Username, Timestamp, EditAction, DeleteAction, ReplyAction, postId, userId}) => {
     const [showContent, setShowContent] = useState(false);
     const [showComments, setShowComments] = useState(false);
+    const user = authentication.currentUser;
+
+    let renderEditButton;
+    userId==user.uid ? (renderEditButton =                  
+        <TouchableOpacity onPress={EditAction}><Image source={EditIcon} resizeMode="contain" style={styles.icons}/></TouchableOpacity>
+    ) 
+    : 
+    (renderEditButton = 
+        <View style={styles.icons}></View>
+    );
+
+    let renderDeleteButton;
+    userId==user.uid ? (renderDeleteButton =                  
+        <TouchableOpacity onPress={DeleteAction}><Image source={DeleteIcon} resizeMode="contain" style={styles.icons}/></TouchableOpacity>
+    ) 
+    : 
+    (renderDeleteButton = 
+        <View style={styles.icons}></View>
+    );
 
     return (
         <View style={styles.root}>
@@ -30,8 +50,8 @@ const ForumCard = ({Title, Body, Username, Timestamp, EditAction, DeleteAction, 
                     </View>
                     
                     <View style={styles.iconButtons}>
-                        <TouchableOpacity onPress={EditAction}><Image source={EditIcon} resizeMode="contain" style={styles.icons}/></TouchableOpacity>
-                        <TouchableOpacity onPress={DeleteAction}><Image source={DeleteIcon} resizeMode="contain" style={styles.icons}/></TouchableOpacity>
+                        {renderEditButton}
+                        {renderDeleteButton}
                         <TouchableOpacity onPress={ReplyAction}><Image source={ReplyIcon} resizeMode="contain" style={styles.icons}/></TouchableOpacity>
                     </View>
                     
