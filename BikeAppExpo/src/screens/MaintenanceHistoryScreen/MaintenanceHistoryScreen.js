@@ -152,7 +152,7 @@ const MaintenanceHistoryScreen = () => {
                     <View style={styles.modalbg}>
                         <View style={styles.modal}>
                             <View style={styles.modal_titleContainer}>
-                                <Text style={styles.modal_title}>Add a Journey</Text>
+                                <Text style={styles.modal_title}>Add Maintenance</Text>
                             </View>
 
                             <CustomInput placeholder='Part(s)' value={parts} setValue={setParts} multiline={true}/>
